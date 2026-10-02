@@ -1,0 +1,1245 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>東京9天行程</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #d4315d;
+            --secondary-color: #f8a9c5;
+            --accent-color: #ffd4e5;
+            --text-dark: #333;
+            --text-light: #666;
+            --bg-light: #f9f6f3;
+            --border-color: #e0d5d0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans CJK TC', 'Hiragino Sans GB', sans-serif;
+            background-color: #fff;
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #c72c5c 100%);
+            color: white;
+            padding: 2rem 1rem;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(212, 49, 93, 0.15);
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1rem;
+            opacity: 0.95;
+        }
+
+        .tabs {
+            display: flex;
+            overflow-x: auto;
+            background-color: white;
+            border-bottom: 2px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .tab-btn {
+            flex: 0 0 auto;
+            padding: 1rem 1.2rem;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 0.95rem;
+            color: var(--text-light);
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .tab-btn:hover {
+            color: var(--primary-color);
+        }
+
+        .tab-btn.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .day-content {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .day-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .day-header {
+            background: linear-gradient(135deg, var(--accent-color) 0%, var(--secondary-color) 100%);
+            padding: 2rem 1.5rem;
+            border-radius: 12px;
+            margin: 2rem 0 1.5rem 0;
+        }
+
+        .day-header h2 {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .day-header p {
+            color: var(--text-dark);
+            font-size: 0.95rem;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            color: var(--primary-color);
+            margin: 2rem 0 1rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent-color);
+            font-weight: 600;
+        }
+
+        .itinerary-card {
+            background: white;
+            border-left: 4px solid var(--primary-color);
+            padding: 1.2rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .itinerary-card:hover {
+            transform: translateX(4px);
+            box-shadow: 0 4px 12px rgba(212, 49, 93, 0.1);
+        }
+
+        .time {
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .activity {
+            font-size: 0.95rem;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+            line-height: 1.5;
+        }
+
+        .transport, .notes {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-bottom: 0.3rem;
+            padding-left: 1rem;
+        }
+
+        .transport::before {
+            content: "🚌 ";
+        }
+
+        .notes::before {
+            content: "ℹ️ ";
+        }
+
+        .expense-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .expense-table thead {
+            background: linear-gradient(135deg, var(--primary-color), #c72c5c);
+            color: white;
+        }
+
+        .expense-table th {
+            padding: 0.8rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .expense-table td {
+            padding: 0.8rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .expense-table tbody tr:hover {
+            background-color: var(--bg-light);
+        }
+
+        .category-badge {
+            display: inline-block;
+            background: var(--accent-color);
+            color: var(--primary-color);
+            padding: 0.3rem 0.7rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .price {
+            text-align: right;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .photo-section {
+            background: var(--bg-light);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+        }
+
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .photo-item {
+            aspect-ratio: 1;
+            background: white;
+            border: 2px dashed var(--border-color);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .photo-item:hover {
+            border-color: var(--primary-color);
+            background: var(--accent-color);
+        }
+
+        .photo-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .photo-placeholder {
+            text-align: center;
+            color: var(--text-light);
+        }
+
+        .photo-placeholder span {
+            font-size: 2rem;
+        }
+
+        .photo-label {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0,0,0,0.6);
+            color: white;
+            padding: 0.5rem;
+            font-size: 0.8rem;
+            text-align: center;
+        }
+
+        .accommodation-box {
+            background: linear-gradient(135deg, var(--secondary-color) 0%, var(--accent-color) 100%);
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            color: var(--text-dark);
+        }
+
+        .accommodation-box strong {
+            color: var(--primary-color);
+        }
+
+        .footer {
+            background: var(--bg-light);
+            padding: 2rem 1rem;
+            text-align: center;
+            color: var(--text-light);
+            margin-top: 3rem;
+            border-top: 2px solid var(--border-color);
+        }
+
+        .summary {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin: 1.5rem 0;
+            border: 2px solid var(--border-color);
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .summary-row:last-child {
+            border-bottom: none;
+        }
+
+        .summary-label {
+            color: var(--text-light);
+        }
+
+        .summary-value {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.5rem;
+            }
+
+            .day-header {
+                padding: 1.5rem;
+            }
+
+            .day-header h2 {
+                font-size: 1.2rem;
+            }
+
+            .photo-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+
+            .tab-btn {
+                padding: 0.8rem 1rem;
+                font-size: 0.9rem;
+            }
+
+            .expense-table th, .expense-table td {
+                padding: 0.6rem 0.4rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 0.8rem;
+            }
+
+            .header {
+                padding: 1.5rem 0.8rem;
+            }
+
+            .header h1 {
+                font-size: 1.3rem;
+            }
+
+            .section-title {
+                font-size: 1.1rem;
+            }
+
+            .photo-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.8rem;
+            }
+
+            .expense-table {
+                font-size: 0.85rem;
+            }
+
+            .expense-table th, .expense-table td {
+                padding: 0.4rem 0.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🗻 東京9天行程</h1>
+        <p>10/16～10/24 | 5位大人</p>
+    </div>
+
+    <div class="tabs">
+        <button class="tab-btn active" data-day="d1">D1 10/16</button>
+        <button class="tab-btn" data-day="d2">D2 10/17</button>
+        <button class="tab-btn" data-day="d3">D3 10/18</button>
+        <button class="tab-btn" data-day="d4">D4 10/19</button>
+        <button class="tab-btn" data-day="d5">D5 10/20</button>
+        <button class="tab-btn" data-day="d6">D6 10/21</button>
+        <button class="tab-btn" data-day="d7">D7 10/22</button>
+        <button class="tab-btn" data-day="d8">D8 10/23</button>
+        <button class="tab-btn" data-day="d9">D9 10/24</button>
+    </div>
+
+    <div class="container">
+        <!-- D1: 10/16(六) 抵達東京 -->
+        <div id="d1" class="day-content active">
+            <div class="day-header">
+                <h2>D1 | 10/16 (六) — 抵達東京</h2>
+                <div class="accommodation-box">
+                    <strong>🏨 住宿：</strong>東京飯店
+                </div>
+            </div>
+
+            <h3 class="section-title">📍 行程</h3>
+            <div class="itinerary-card">
+                <div class="time">下午</div>
+                <div class="activity">抵達成田，入境、領行李</div>
+                <div class="notes">確認航廈：T1「成田空港」站；T2／T3「空港第2ビル」站</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">入境後</div>
+                <div class="activity">前往飯店</div>
+                <div class="transport">JR 總武快速線，直達馬喰町（約 1.5 小時）</div>
+                <div class="notes">不用換車</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">傍晚</div>
+                <div class="activity">入住東京飯店</div>
+                <div class="transport">馬喰町站步行 3 分鐘</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">晚上</div>
+                <div class="activity">晚餐：附近超市、超商</div>
+                <div class="transport">步行</div>
+            </div>
+
+            <h3 class="section-title">💰 費用明細</h3>
+            <table class="expense-table">
+                <thead>
+                    <tr>
+                        <th>類別</th>
+                        <th>項目</th>
+                        <th>金額</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="category-badge">交通</span></td>
+                        <td>JR 成田機場 → 馬喰町</td>
+                        <td class="price">¥1,340</td>
+                    </tr>
+                    <tr>
+                        <td><span class="category-badge">餐費</span></td>
+                        <td>晚餐：超市、超商</td>
+                        <td class="price">¥1,500</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- D2: 10/17(日) -->
+        <div id="d2" class="day-content">
+            <div class="day-header">
+                <h2>D2 | 10/17 (日) — 明治神宮・澀谷SKY</h2>
+                <div class="accommodation-box">
+                    <strong>🏨 住宿：</strong>東京飯店
+                </div>
+            </div>
+
+            <h3 class="section-title">📍 行程</h3>
+            <div class="itinerary-card">
+                <div class="time">08:30</div>
+                <div class="activity">出門</div>
+                <div class="transport">馬喰横山 → 新宿線到新宿三丁目 → 副都心線到明治神宮前（約 35 分）</div>
+                <div class="notes">早餐：東京飯店</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">09:00</div>
+                <div class="activity">明治神宮</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">11:00</div>
+                <div class="activity">午餐：BASO OMOTESANDO（粗蕎麥沾麵）</div>
+                <div class="transport">明治神宮前站 7 號出口步行 2 分</div>
+                <div class="notes">不能預約，先買餐券排隊；5 人可能分開坐</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">14:00</div>
+                <div class="activity">Starbucks Reserve Roastery 東京</div>
+                <div class="transport">澀谷 → 東急東橫線到中目黑（一站）</div>
+                <div class="notes">週日可能要排隊入場</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">16:30</div>
+                <div class="activity">澀谷 SKY（夕陽和夜景）</div>
+                <div class="transport">中目黑 → 澀谷</div>
+                <div class="notes">網路票 15:00 後 ¥3,400，先訂</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">18:30</div>
+                <div class="activity">晚餐：利久牛舌 澀谷 Hikarie 店</div>
+                <div class="transport">澀谷站旁</div>
+                <div class="notes">建議先訂位</div>
+            </div>
+
+            <h3 class="section-title">💰 費用明細</h3>
+            <table class="expense-table">
+                <thead>
+                    <tr>
+                        <th>類別</th>
+                        <th>項目</th>
+                        <th>金額</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="category-badge">交通</span></td>
+                        <td>地鐵 馬喰横山 → 明治神宮前</td>
+                        <td class="price">¥300</td>
+                    </tr>
+                    <tr>
+                        <td><span class="category-badge">交通</span></td>
+                        <td>東急東橫線 澀谷 ⇄ 中目黑（往返）</td>
+                        <td class="price">¥280</td>
+                    </tr>
+                    <tr>
+                        <td><span class="category-badge">交通</span></td>
+                        <td>地鐵 澀谷 → 馬喰横山</td>
+                        <td class="price">¥300</td>
+                    </tr>
+                    <tr>
+                        <td><span class="category-badge">門票</span></td>
+                        <td>澀谷 SKY（網路票，15:00 後）</td>
+                        <td class="price">¥3,400</td>
+                    </tr>
+                    <tr>
+                        <td><span class="category-badge">餐費</span></td>
+                        <td>午餐：BASO</td>
+                        <td class="price">¥1,500</td>
+                    </tr>
+                    <tr>
+                        <td><span class="category-badge">其他</span></td>
+                        <td>星巴克烘焙工坊 飲料</td>
+                        <td class="price">¥1,500</td>
+                    </tr>
+                    <tr>
+                        <td><span class="category-badge">餐費</span></td>
+                        <td>晚餐：利久牛舌</td>
+                        <td class="price">¥4,000</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- D3: 10/18(一) 箱根 -->
+        <div id="d3" class="day-content">
+            <div class="day-header">
+                <h2>D3 | 10/18 (一) — 箱根6種交通</h2>
+                <div class="accommodation-box">
+                    <strong>🏨 住宿：</strong>箱根飯店
+                </div>
+            </div>
+
+            <h3 class="section-title">📍 行程</h3>
+            <div class="itinerary-card">
+                <div class="time">07:40</div>
+                <div class="activity">出門</div>
+                <div class="transport">馬喰横山 → 都營新宿線直達新宿（約 20 分）</div>
+                <div class="notes">早餐：東京飯店；大行李建議寄放東京飯店</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">08:30</div>
+                <div class="activity">新宿 → 箱根湯本</div>
+                <div class="transport">① 浪漫特快</div>
+                <div class="notes">特急券另買、先訂位</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">10:00</div>
+                <div class="activity">抵達箱根湯本，行李寄放箱根飯店</div>
+                <div class="transport">步行 3 分鐘</div>
+                <div class="notes">入住前可以先寄放行李</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">10:20</div>
+                <div class="activity">箱根湯本 → 強羅</div>
+                <div class="transport">② 登山電車</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">11:05</div>
+                <div class="activity">午餐：田むら銀かつ亭 本店</div>
+                <div class="transport">強羅站步行 2 分</div>
+                <div class="notes">不能預約、現場領號碼牌</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">12:10</div>
+                <div class="activity">強羅 → 早雲山</div>
+                <div class="transport">③ 登山纜車</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">12:30</div>
+                <div class="activity">早雲山 → 大涌谷（吃黑蛋）</div>
+                <div class="transport">④ 空中纜車</div>
+                <div class="notes">纜車營業到 17:00</div>
+            </div>
+
+            <h3 class="section-title">💰 費用明細</h3>
+            <table class="expense-table">
+                <thead>
+                    <tr>
+                        <th>類別</th>
+                        <th>項目</th>
+                        <th>金額</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="category-badge">交通</span></td>
+                        <td>都營新宿線 馬喰横山 → 新宿</td>
+                        <td class="price">¥280</td>
+                    </tr>
+                    <tr>
+                        <td><span class="category-badge">交通</span></td>
+                        <td>箱根周遊券 2 日券</td>
+                        <td class="price">¥7,100</td>
+                    </tr>
+                    <tr>
+                        <td><span class="category-badge">交通</span></td>
+                        <td>浪漫特快 特急券</td>
+                        <td class="price">¥1,200</td>
+                    </tr>
+                    <tr>
+                        <td><span class="category-badge">餐費</span></td>
+                        <td>午餐：田むら銀かつ亭</td>
+                        <td class="price">¥1,480</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- D4: 10/19(二) 熱海 -->
+        <div id="d4" class="day-content">
+            <div class="day-header">
+                <h2>D4 | 10/19 (二) — 箱根→熱海</h2>
+                <div class="accommodation-box">
+                    <strong>🏨 住宿：</strong>熱海飯店（一泊二食）
+                </div>
+            </div>
+
+            <h3 class="section-title">📍 行程</h3>
+            <div class="itinerary-card">
+                <div class="time">09:30</div>
+                <div class="activity">退房 → 箱根湯本 → 小田原 → JR 到熱海</div>
+                <div class="transport">登山線（周遊券可搭）→ JR</div>
+                <div class="notes">早餐：確認箱根飯店是否含</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">10:30</div>
+                <div class="activity">抵達熱海，寄放行李（車站）</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">11:00</div>
+                <div class="activity">午餐：五味八珍 LUSCA 熱海店（濱松餃子）</div>
+                <div class="transport">熱海站大樓 3 樓</div>
+                <div class="notes">11:00～21:00</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">12:15</div>
+                <div class="activity">熱海城（展望台）</div>
+                <div class="transport">巴士到後樂園 → 空中纜車 → 步行</div>
+                <div class="notes">9:00～17:00，最後入場 16:30</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">14:45</div>
+                <div class="activity">來宮神社（千年大樟樹）</div>
+                <div class="transport">巴士→熱海站→JR伊東線→步行5分</div>
+            </div>
+
+            <h3 class="section-title">💰 費用明細</h3>
+            <table class="expense-table">
+                <thead>
+                    <tr>
+                        <th>類別</th>
+                        <th>項目</th>
+                        <th>金額</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="category-badge">交通</span></td>
+                        <td>JR 小田原 → 熱海</td>
+                        <td class="price">¥510</td>
+                    </tr>
+                    <tr>
+                        <td><span class="category-badge">交通</span></td>
+                        <td>巴士 熱海站 ⇄ 後樂園（往返）</td>
+                        <td class="price">¥500</td>
+                    </tr>
+                    <tr>
+                        <td><span class="category-badge">交通</span></td>
+                        <td>熱海空中纜車（往返）</td>
+                        <td class="price">¥900</td>
+                    </tr>
+                    <tr>
+                        <td><span class="category-badge">交通</span></td>
+                        <td>JR 熱海 ⇄ 來宮（往返）</td>
+                        <td class="price">¥300</td>
+                    </tr>
+                    <tr>
+                        <td><span class="category-badge">門票</span></td>
+                        <td>熱海城</td>
+                        <td class="price">¥1,200</td>
+                    </tr>
+                    <tr>
+                        <td><span class="category-badge">餐費</span></td>
+                        <td>午餐：五味八珍</td>
+                        <td class="price">¥1,500</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- D5: 10/20(三) 熱海→上野 -->
+        <div id="d5" class="day-content">
+            <div class="day-header">
+                <h2>D5 | 10/20 (三) — 熱海小吃→上野</h2>
+                <div class="accommodation-box">
+                    <strong>🏨 住宿：</strong>東京飯店
+                </div>
+            </div>
+
+            <h3 class="section-title">📍 行程</h3>
+            <div class="itinerary-card">
+                <div class="time">08:00</div>
+                <div class="activity">早餐：熱海飯店</div>
+                <div class="notes">中午要吃燒肉，早餐吃輕一點</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">09:45</div>
+                <div class="activity">平和通り名店街（右邊）</div>
+                <div class="transport">步行</div>
+                <div class="notes">炸蝦美乃滋棒→溫泉饅頭→方形泡芙</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">10:30</div>
+                <div class="activity">仲見世通り商店街（左邊）、車站前</div>
+                <div class="transport">步行</div>
+                <div class="notes">奶油紅豆麵包→熱海布丁→起司甜點</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">11:30</div>
+                <div class="activity">取行李，前往品川</div>
+                <div class="transport">橫須賀線到品川</div>
+            </div>
+
+            <h3 class="section-title">💰 費用明細</h3>
+            <table class="expense-table">
+                <thead>
+                    <tr>
+                        <th>類別</th>
+                        <th>項目</th>
+                        <th>金額</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="category-badge">其他</span></td>
+                        <td>熱海站寄物櫃</td>
+                        <td class="price">¥700</td>
+                    </tr>
+                    <tr>
+                        <td><span class="category-badge">餐費</span></td>
+                        <td>炸蝦美乃滋棒</td>
+                        <td class="price">¥420</td>
+                    </tr>
+                    <tr>
+                        <td><span class="category-badge">餐費</span></td>
+                        <td>溫泉饅頭</td>
+                        <td class="price">¥150</td>
+                    </tr>
+                    <tr>
+                        <td><span class="category-badge">餐費</span></td>
+                        <td>方形泡芙</td>
+                        <td class="price">¥380</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- D6: 10/21(四) 日光 -->
+        <div id="d6" class="day-content">
+            <div class="day-header">
+                <h2>D6 | 10/21 (四) — 日光華嚴瀑布</h2>
+                <div class="accommodation-box">
+                    <strong>🏨 住宿：</strong>東京飯店
+                </div>
+            </div>
+
+            <h3 class="section-title">📍 行程</h3>
+            <div class="itinerary-card">
+                <div class="time">07:00</div>
+                <div class="activity">出門</div>
+                <div class="transport">東日本橋 → 淺草線到淺草 → 步行到東武淺草站</div>
+                <div class="notes">早餐：前一晚買超商飯糰，在車上吃</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">07:30</div>
+                <div class="activity">淺草 → 東武日光</div>
+                <div class="transport">東武特急（約 2 小時）</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">09:30</div>
+                <div class="activity">上山</div>
+                <div class="transport">巴士經伊呂波坂</div>
+                <div class="notes">楓葉季可能塞車</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">10:30</div>
+                <div class="activity">華嚴瀑布、中禪寺湖</div>
+                <div class="notes">觀瀑台電梯往返 ¥600</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">13:00</div>
+                <div class="activity">午餐：元祖日光ゆば料理 恵比寿家</div>
+                <div class="transport">巴士站旁</div>
+                <div class="notes">要預約；最後點餐 14:30；週二公休</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">14:30</div>
+                <div class="activity">日光東照宮（陽明門、三猿、眠貓）</div>
+                <div class="transport">步行</div>
+                <div class="notes">4～10 月最後入場 16:30</div>
+            </div>
+
+            <h3 class="section-title">💰 費用明細</h3>
+            <table class="expense-table">
+                <thead>
+                    <tr>
+                        <th>類別</th>
+                        <th>項目</th>
+                        <th>金額</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="category-badge">交通</span></td>
+                        <td>淺草線 東日本橋 ⇄ 淺草（往返）</td>
+                        <td class="price">¥360</td>
+                    </tr>
+                    <tr>
+                        <td><span class="category-badge">交通</span></td>
+                        <td>東武特急 淺草 ⇄ 東武日光（往返）</td>
+                        <td class="price">¥5,800</td>
+                    </tr>
+                    <tr>
+                        <td><span class="category-badge">交通</span></td>
+                        <td>巴士 東武日光 ⇄ 中禪寺溫泉（往返）</td>
+                        <td class="price">¥2,500</td>
+                    </tr>
+                    <tr>
+                        <td><span class="category-badge">門票</span></td>
+                        <td>華嚴瀑布 觀瀑台電梯</td>
+                        <td class="price">¥600</td>
+                    </tr>
+                    <tr>
+                        <td><span class="category-badge">門票</span></td>
+                        <td>日光東照宮</td>
+                        <td class="price">¥1,600</td>
+                    </tr>
+                    <tr>
+                        <td><span class="category-badge">餐費</span></td>
+                        <td>午餐：恵比寿家（B 套餐）</td>
+                        <td class="price">¥3,500</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- D7: 10/22(五) 幕張 -->
+        <div id="d7" class="day-content">
+            <div class="day-header">
+                <h2>D7 | 10/22 (五) — 幕張outlet</h2>
+                <div class="accommodation-box">
+                    <strong>🏨 住宿：</strong>東京飯店
+                </div>
+            </div>
+
+            <h3 class="section-title">📍 行程</h3>
+            <div class="itinerary-card">
+                <div class="time">09:00</div>
+                <div class="activity">早餐：東京飯店</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">10:00</div>
+                <div class="activity">前往幕張</div>
+                <div class="transport">小傳馬町 → 日比谷線到八丁堀 → 京葉線到海濱幕張（約 45 分）</div>
+                <div class="notes">在八丁堀轉車，避開東京站京葉線長路</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">10:45～18:00</div>
+                <div class="activity">三井 outlet 幕張（一整天）</div>
+                <div class="notes">午餐在 outlet 裡隨意吃；購物金額未列入預算</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">18:00</div>
+                <div class="activity">回東京</div>
+                <div class="transport">京葉線到東京站（約 30 分）</div>
+            </div>
+
+            <h3 class="section-title">💰 費用明細</h3>
+            <table class="expense-table">
+                <thead>
+                    <tr>
+                        <th>類別</th>
+                        <th>項目</th>
+                        <th>金額</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="category-badge">交通</span></td>
+                        <td>日比谷線＋京葉線 往返</td>
+                        <td class="price">¥1,600</td>
+                    </tr>
+                    <tr>
+                        <td><span class="category-badge">餐費</span></td>
+                        <td>午餐：outlet 內</td>
+                        <td class="price">¥2,000</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- D8: 10/23(六) 最後一天 -->
+        <div id="d8" class="day-content">
+            <div class="day-header">
+                <h2>D8 | 10/23 (六) — 東京精華之旅</h2>
+                <div class="accommodation-box">
+                    <strong>🏨 住宿：</strong>東京飯店
+                </div>
+            </div>
+
+            <h3 class="section-title">📍 行程</h3>
+            <div class="itinerary-card">
+                <div class="time">08:30</div>
+                <div class="activity">出門</div>
+                <div class="transport">東日本橋 → 淺草線直達淺草</div>
+                <div class="notes">早餐：東京飯店</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">09:00</div>
+                <div class="activity">淺草寺、雷門、仲見世通</div>
+                <div class="transport">步行</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">11:00</div>
+                <div class="activity">晴空塔</div>
+                <div class="transport">淺草線坐一站到押上</div>
+                <div class="notes">展望台為選配</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">12:30</div>
+                <div class="activity">午餐：人形町今半 本店（壽喜燒）</div>
+                <div class="transport">押上 → 淺草線直達人形町</div>
+                <div class="notes">TableCheck 可預約；週六午餐菜單要再確認</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">16:45</div>
+                <div class="activity">麻布台之丘 Sky Room Cafe & Bar（34 樓）</div>
+                <div class="transport">銀座 → 日比谷線到神谷町</div>
+                <div class="notes">不能預約；服務費 ¥500 + 每人至少一杯</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">18:15</div>
+                <div class="activity">晚餐：銀座篝（雞白湯拉麵）</div>
+                <div class="transport">神谷町 → 日比谷線回銀座</div>
+                <div class="notes">不能預約；本店只收現金；週六晚上人多</div>
+            </div>
+
+            <h3 class="section-title">💰 費用明細</h3>
+            <table class="expense-table">
+                <thead>
+                    <tr>
+                        <th>類別</th>
+                        <th>項目</th>
+                        <th>金額</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="category-badge">交通</span></td>
+                        <td>淺草線 東日本橋 → 淺草</td>
+                        <td class="price">¥180</td>
+                    </tr>
+                    <tr>
+                        <td><span class="category-badge">交通</span></td>
+                        <td>淺草線 淺草 → 押上</td>
+                        <td class="price">¥180</td>
+                    </tr>
+                    <tr>
+                        <td><span class="category-badge">交通</span></td>
+                        <td>淺草線 押上 → 人形町</td>
+                        <td class="price">¥220</td>
+                    </tr>
+                    <tr>
+                        <td><span class="category-badge">交通</span></td>
+                        <td>日比谷線 銀座 ⇄ 神谷町（往返）</td>
+                        <td class="price">¥360</td>
+                    </tr>
+                    <tr>
+                        <td><span class="category-badge">門票</span></td>
+                        <td>晴空塔展望台（選配）</td>
+                        <td class="price">¥2,500</td>
+                    </tr>
+                    <tr>
+                        <td><span class="category-badge">餐費</span></td>
+                        <td>午餐：人形町今半 本店</td>
+                        <td class="price">¥5,500</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- D9: 10/24(日) 回家 -->
+        <div id="d9" class="day-content">
+            <div class="day-header">
+                <h2>D9 | 10/24 (日) — 回台灣</h2>
+                <div class="accommodation-box">
+                    <strong>🏨 住宿：</strong>返回台灣
+                </div>
+            </div>
+
+            <h3 class="section-title">📍 行程</h3>
+            <div class="itinerary-card">
+                <div class="time">早上</div>
+                <div class="activity">早餐：東京飯店</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">起飛前約 4 小時</div>
+                <div class="activity">退房，前往機場</div>
+                <div class="transport">JR 總武快速線，馬喰町直達成田</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">起飛前 2.5 小時</div>
+                <div class="activity">抵達機場，辦理登機、退稅、逛免稅店</div>
+                <div class="notes">T3 要從 T2 再走約 15 分鐘</div>
+            </div>
+
+            <h3 class="section-title">💰 費用明細</h3>
+            <table class="expense-table">
+                <thead>
+                    <tr>
+                        <th>類別</th>
+                        <th>項目</th>
+                        <th>金額</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="category-badge">交通</span></td>
+                        <td>JR 馬喰町 → 成田機場</td>
+                        <td class="price">¥1,340</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="photo-section">
+            <h3 class="section-title">📸 景點與美食照片</h3>
+            <p style="color: var(--text-light); margin-bottom: 1rem;">點擊下方格子上傳照片</p>
+            <div class="photo-grid">
+                <div class="photo-item">
+                    <div class="photo-placeholder">
+                        <span>📷</span>
+                        <p>成田機場</p>
+                    </div>
+                    <div class="photo-label">D1</div>
+                </div>
+                <div class="photo-item">
+                    <div class="photo-placeholder">
+                        <span>📷</span>
+                        <p>明治神宮</p>
+                    </div>
+                    <div class="photo-label">D2</div>
+                </div>
+                <div class="photo-item">
+                    <div class="photo-placeholder">
+                        <span>📷</span>
+                        <p>箱根景色</p>
+                    </div>
+                    <div class="photo-label">D3</div>
+                </div>
+                <div class="photo-item">
+                    <div class="photo-placeholder">
+                        <span>📷</span>
+                        <p>熱海城</p>
+                    </div>
+                    <div class="photo-label">D4</div>
+                </div>
+                <div class="photo-item">
+                    <div class="photo-placeholder">
+                        <span>📷</span>
+                        <p>熱海小吃</p>
+                    </div>
+                    <div class="photo-label">D5</div>
+                </div>
+                <div class="photo-item">
+                    <div class="photo-placeholder">
+                        <span>📷</span>
+                        <p>華嚴瀑布</p>
+                    </div>
+                    <div class="photo-label">D6</div>
+                </div>
+                <div class="photo-item">
+                    <div class="photo-placeholder">
+                        <span>📷</span>
+                        <p>幕張outlet</p>
+                    </div>
+                    <div class="photo-label">D7</div>
+                </div>
+                <div class="photo-item">
+                    <div class="photo-placeholder">
+                        <span>📷</span>
+                        <p>淺草寺</p>
+                    </div>
+                    <div class="photo-label">D8</div>
+                </div>
+                <div class="photo-item">
+                    <div class="photo-placeholder">
+                        <span>📷</span>
+                        <p>澀谷SKY</p>
+                    </div>
+                    <div class="photo-label">D2</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>✈️ 東京旅遊行程表</p>
+        <p style="font-size: 0.9rem; margin-top: 0.5rem;">祝旅途愉快！</p>
+    </div>
+
+    <script>
+        // Tab switching functionality
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const dayContents = document.querySelectorAll('.day-content');
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const dayId = button.getAttribute('data-day');
+
+                // Remove active class from all
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                dayContents.forEach(content => content.classList.remove('active'));
+
+                // Add active class to clicked button and corresponding content
+                button.classList.add('active');
+                document.getElementById(dayId).classList.add('active');
+
+                // Scroll to top
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
+
+        // Photo upload functionality
+        const photoItems = document.querySelectorAll('.photo-item');
+        photoItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const input = document.createElement('input');
+                input.type = 'file';
+                input.accept = 'image/*';
+                input.onchange = (e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = (event) => {
+                            // Create img element
+                            const img = document.createElement('img');
+                            img.src = event.target.result;
+
+                            // Clear placeholder and add image
+                            item.innerHTML = '';
+                            item.appendChild(img);
+
+                            // Re-add label
+                            const label = document.createElement('div');
+                            label.className = 'photo-label';
+                            label.textContent = item.querySelector('.photo-label')?.textContent || 'Photos';
+                            item.appendChild(label);
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                };
+                input.click();
+            });
+        });
+    </script>
+</body>
+</html>

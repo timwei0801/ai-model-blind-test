@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>同一份東京行程，4 個 AI 做的網頁</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root { --ink:#1A2D35; --ember:#FF6B35; --mint:#00D9A3; --bone:#F5F2EA; --gray:#6B7480; --line:#E5E0D4; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { background:var(--bone); color:var(--ink); font-family:"Noto Sans TC","PingFang TC",sans-serif; line-height:1.7; }
+  main { max-width:640px; margin:0 auto; padding:40px 16px 56px; }
+  .kicker { font-size:14px; font-weight:700; color:var(--gray); }
+  h1 { font-size:30px; font-weight:900; line-height:1.3; margin:8px 0 16px; }
+  h1 em { font-style:normal; color:var(--ember); }
+  p { margin:0 0 14px; font-size:16px; }
+  .prompt { background:#fff; border:2px solid var(--line); border-radius:14px; padding:14px 16px; font-size:15px; margin:4px 0 18px; }
+  .prompt small { display:block; color:var(--gray); font-size:13px; margin-bottom:4px; }
+  .grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin:22px 0; }
+  .card { display:block; background:var(--ink); color:#fff; text-decoration:none; border-radius:16px; padding:22px 16px; text-align:center; }
+  .card b { display:block; font-size:44px; font-weight:900; line-height:1; color:var(--mint); }
+  .card span { font-size:14px; opacity:.85; }
+  .vote { background:var(--ember); color:#fff; border-radius:14px; padding:14px 16px; font-weight:700; text-align:center; margin:8px 0 22px; }
+  .vote a { color:#fff; }
+  ul { padding-left:20px; font-size:14px; color:var(--gray); }
+  li { margin-bottom:6px; }
+  footer { margin-top:28px; font-weight:900; }
+</style>
+</head>
+<body>
+<main>
+  <p class="kicker">AI 模型盲測</p>
+  <h1>同一份東京行程，<br><em>4 個 AI</em> 做出來的網頁</h1>
+  <p>我把同一份 Excel 行程表（9 天、5 個大人、48 張景點照片），用一字不差的同一句話，交給 4 個不同的 AI 模型。</p>
+  <div class="prompt"><small>它們收到的指令</small>幫我把這份東京行程做成一份精美好看的 HTML，要放上表格裡的照片，要能在手機上看。</div>
+  <p>先不告訴你哪個是哪個。<b>用手機點開看看，你覺得哪個做得最好？</b></p>
+  <div class="grid">
+    <a class="card" href="A.html"><b>A</b><span>點我看</span></a>
+    <a class="card" href="B.html"><b>B</b><span>點我看</span></a>
+    <a class="card" href="C.html"><b>C</b><span>點我看</span></a>
+    <a class="card" href="D.html"><b>D</b><span>點我看</span></a>
+  </div>
+  <div class="vote">看完到 Threads <a href="https://www.threads.com/@timwei.ai">@timwei.ai</a> 投票，答案會在那裡揭曉</div>
+  <ul>
+    <li>網頁是 AI 做的，我沒有改內容，只做了兩件事：有拍到手的照片模糊處理、飯店名稱換成「東京飯店」這類代稱。</li>
+    <li>照片是我做行程時從網路上存的，只當示意。</li>
+    <li>網頁上的價格、時間都是規劃中的估計，不是旅遊建議。</li>
+  </ul>
+  <footer>@timwei.ai</footer>
+</main>
+</body>
+</html>
