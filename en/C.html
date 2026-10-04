@@ -1,0 +1,1251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tokyo 9-day itinerary</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #d4315d;
+            --secondary-color: #f8a9c5;
+            --accent-color: #ffd4e5;
+            --text-dark: #333;
+            --text-light: #666;
+            --bg-light: #f9f6f3;
+            --border-color: #e0d5d0;
+        }
+
+        body {
+            font-family: "EnPunct",-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans CJK TC', 'Hiragino Sans GB', sans-serif;
+            background-color: #fff;
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary-color) 0%, #c72c5c 100%);
+            color: white;
+            padding: 2rem 1rem;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(212, 49, 93, 0.15);
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1rem;
+            opacity: 0.95;
+        }
+
+        .tabs {
+            display: flex;
+            overflow-x: auto;
+            background-color: white;
+            border-bottom: 2px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .tab-btn {
+            flex: 0 0 auto;
+            padding: 1rem 1.2rem;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 0.95rem;
+            color: var(--text-light);
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .tab-btn:hover {
+            color: var(--primary-color);
+        }
+
+        .tab-btn.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        .day-content {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .day-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .day-header {
+            background: linear-gradient(135deg, var(--accent-color) 0%, var(--secondary-color) 100%);
+            padding: 2rem 1.5rem;
+            border-radius: 12px;
+            margin: 2rem 0 1.5rem 0;
+        }
+
+        .day-header h2 {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .day-header p {
+            color: var(--text-dark);
+            font-size: 0.95rem;
+        }
+
+        .section-title {
+            font-size: 1.3rem;
+            color: var(--primary-color);
+            margin: 2rem 0 1rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent-color);
+            font-weight: 600;
+        }
+
+        .itinerary-card {
+            background: white;
+            border-left: 4px solid var(--primary-color);
+            padding: 1.2rem;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .itinerary-card:hover {
+            transform: translateX(4px);
+            box-shadow: 0 4px 12px rgba(212, 49, 93, 0.1);
+        }
+
+        .time {
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1.1rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .activity {
+            font-size: 0.95rem;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+            line-height: 1.5;
+        }
+
+        .transport, .notes {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-bottom: 0.3rem;
+            padding-left: 1rem;
+        }
+
+        .transport::before {
+            content: "🚌 ";
+        }
+
+        .notes::before {
+            content: "ℹ️ ";
+        }
+
+        .expense-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .expense-table thead {
+            background: linear-gradient(135deg, var(--primary-color), #c72c5c);
+            color: white;
+        }
+
+        .expense-table th {
+            padding: 0.8rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .expense-table td {
+            padding: 0.8rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .expense-table tbody tr:hover {
+            background-color: var(--bg-light);
+        }
+
+        .category-badge {
+            display: inline-block;
+            background: var(--accent-color);
+            color: var(--primary-color);
+            padding: 0.3rem 0.7rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .price {
+            text-align: right;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .photo-section {
+            background: var(--bg-light);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+        }
+
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .photo-item {
+            aspect-ratio: 1;
+            background: white;
+            border: 2px dashed var(--border-color);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .photo-item:hover {
+            border-color: var(--primary-color);
+            background: var(--accent-color);
+        }
+
+        .photo-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .photo-placeholder {
+            text-align: center;
+            color: var(--text-light);
+        }
+
+        .photo-placeholder span {
+            font-size: 2rem;
+        }
+
+        .photo-label {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0,0,0,0.6);
+            color: white;
+            padding: 0.5rem;
+            font-size: 0.8rem;
+            text-align: center;
+        }
+
+        .accommodation-box {
+            background: linear-gradient(135deg, var(--secondary-color) 0%, var(--accent-color) 100%);
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            color: var(--text-dark);
+        }
+
+        .accommodation-box strong {
+            color: var(--primary-color);
+        }
+
+        .footer {
+            background: var(--bg-light);
+            padding: 2rem 1rem;
+            text-align: center;
+            color: var(--text-light);
+            margin-top: 3rem;
+            border-top: 2px solid var(--border-color);
+        }
+
+        .summary {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin: 1.5rem 0;
+            border: 2px solid var(--border-color);
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .summary-row:last-child {
+            border-bottom: none;
+        }
+
+        .summary-label {
+            color: var(--text-light);
+        }
+
+        .summary-value {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.5rem;
+            }
+
+            .day-header {
+                padding: 1.5rem;
+            }
+
+            .day-header h2 {
+                font-size: 1.2rem;
+            }
+
+            .photo-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+
+            .tab-btn {
+                padding: 0.8rem 1rem;
+                font-size: 0.9rem;
+            }
+
+            .expense-table th, .expense-table td {
+                padding: 0.6rem 0.4rem;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 0.8rem;
+            }
+
+            .header {
+                padding: 1.5rem 0.8rem;
+            }
+
+            .header h1 {
+                font-size: 1.3rem;
+            }
+
+            .section-title {
+                font-size: 1.1rem;
+            }
+
+            .photo-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.8rem;
+            }
+
+            .expense-table {
+                font-size: 0.85rem;
+            }
+
+            .expense-table th, .expense-table td {
+                padding: 0.4rem 0.3rem;
+            }
+        }
+    </style>
+<style>/* added for the English translation: CJK fonts draw curly quotes full-width, so only these characters use a Latin font */
+@font-face{font-family:"EnPunct";src:local("Helvetica Neue"),local("HelveticaNeue"),local("Arial"),local("ArialMT"),local("Roboto");font-weight:100 500;unicode-range:U+2013,U+2018-201D}
+@font-face{font-family:"EnPunct";src:local("Helvetica Neue Bold"),local("HelveticaNeue-Bold"),local("Arial Bold"),local("Arial-BoldMT"),local("Roboto Bold"),local("Roboto-Bold");font-weight:600 900;unicode-range:U+2013,U+2018-201D}
+@font-face{font-family:"EnPunctSerif";src:local("Georgia"),local("Times New Roman"),local("TimesNewRomanPSMT"),local("Noto Serif");font-weight:100 500;unicode-range:U+2013,U+2018-201D}
+@font-face{font-family:"EnPunctSerif";src:local("Georgia Bold"),local("Georgia-Bold"),local("Times New Roman Bold"),local("TimesNewRomanPS-BoldMT"),local("Noto Serif Bold");font-weight:600 900;unicode-range:U+2013,U+2018-201D}
+</style>
+</head>
+<body>
+    <div class="header">
+        <h1>🗻 Tokyo 9-day itinerary</h1>
+        <p>10/16–10/24 | 5 adults</p>
+    </div>
+
+    <div class="tabs">
+        <button class="tab-btn active" data-day="d1">D1 10/16</button>
+        <button class="tab-btn" data-day="d2">D2 10/17</button>
+        <button class="tab-btn" data-day="d3">D3 10/18</button>
+        <button class="tab-btn" data-day="d4">D4 10/19</button>
+        <button class="tab-btn" data-day="d5">D5 10/20</button>
+        <button class="tab-btn" data-day="d6">D6 10/21</button>
+        <button class="tab-btn" data-day="d7">D7 10/22</button>
+        <button class="tab-btn" data-day="d8">D8 10/23</button>
+        <button class="tab-btn" data-day="d9">D9 10/24</button>
+    </div>
+
+    <div class="container">
+        <!-- D1: 10/16(Sat) Arrive in Tokyo -->
+        <div id="d1" class="day-content active">
+            <div class="day-header">
+                <h2>D1 | 10/16 (Sat) — Arrive in Tokyo</h2>
+                <div class="accommodation-box">
+                    <strong>🏨 Stay: </strong>Tokyo Hotel
+                </div>
+            </div>
+
+            <h3 class="section-title">📍 Itinerary</h3>
+            <div class="itinerary-card">
+                <div class="time">PM</div>
+                <div class="activity">Arrive at Narita, immigration, baggage claim</div>
+                <div class="notes">Check terminal: T1 “Narita Kuko (Narita Airport)” Station; T2/T3 “Kuko Daini Biru (Airport Terminal 2)” Station</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">After entry</div>
+                <div class="activity">Head to hotel</div>
+                <div class="transport">JR Sobu Rapid Line, direct to Bakurocho (approx. 1.5 hours)</div>
+                <div class="notes">No transfer needed</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">Early evening</div>
+                <div class="activity">Check in at Tokyo Hotel</div>
+                <div class="transport">3-minute walk from Bakurocho Station</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">Evening</div>
+                <div class="activity">Dinner: nearby supermarket, convenience store</div>
+                <div class="transport">Walk</div>
+            </div>
+
+            <h3 class="section-title">💰 Cost breakdown</h3>
+            <table class="expense-table">
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Item</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="category-badge">Transport</span></td>
+                        <td>JR Narita Airport → Bakurocho</td>
+                        <td class="price">¥1,340</td>
+                    </tr>
+                    <tr>
+                        <td><span class="category-badge">Meals</span></td>
+                        <td>Dinner: supermarket, convenience store</td>
+                        <td class="price">¥1,500</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- D2: 10/17(Sun) -->
+        <div id="d2" class="day-content">
+            <div class="day-header">
+                <h2>D2 | 10/17 (Sun) — Meiji Shrine・Shibuya Sky</h2>
+                <div class="accommodation-box">
+                    <strong>🏨 Stay: </strong>Tokyo Hotel
+                </div>
+            </div>
+
+            <h3 class="section-title">📍 Itinerary</h3>
+            <div class="itinerary-card">
+                <div class="time">08:30</div>
+                <div class="activity">Head out</div>
+                <div class="transport">Bakuro-yokoyama → Shinjuku Line to Shinjuku-sanchome → Fukutoshin Line to Meiji-jingumae (approx. 35 min)</div>
+                <div class="notes">Breakfast: Tokyo Hotel</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">09:00</div>
+                <div class="activity">Meiji Shrine</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">11:00</div>
+                <div class="activity">Lunch: BASO OMOTESANDO (thick soba dipping noodles)</div>
+                <div class="transport">2-min walk from Meiji-jingumae Station Exit 7</div>
+                <div class="notes">No reservations; buy a meal ticket first and queue; 5 people may be seated separately</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">14:00</div>
+                <div class="activity">Starbucks Reserve Roastery Tokyo</div>
+                <div class="transport">Shibuya → Tokyu Toyoko Line to Nakameguro (one stop)</div>
+                <div class="notes">May need to queue for entry on Sunday</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">16:30</div>
+                <div class="activity">Shibuya Sky (sunset and night view)</div>
+                <div class="transport">Nakameguro → Shibuya</div>
+                <div class="notes">Online ticket after 15:00 ¥3,400, book ahead</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">18:30</div>
+                <div class="activity">Dinner: Rikyu Beef Tongue Shibuya Hikarie branch</div>
+                <div class="transport">Next to Shibuya Station</div>
+                <div class="notes">Reservation recommended</div>
+            </div>
+
+            <h3 class="section-title">💰 Cost breakdown</h3>
+            <table class="expense-table">
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Item</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="category-badge">Transport</span></td>
+                        <td>Subway Bakuro-yokoyama → Meiji-jingumae</td>
+                        <td class="price">¥300</td>
+                    </tr>
+                    <tr>
+                        <td><span class="category-badge">Transport</span></td>
+                        <td>Tokyu Toyoko Line Shibuya ⇄ Nakameguro (round trip)</td>
+                        <td class="price">¥280</td>
+                    </tr>
+                    <tr>
+                        <td><span class="category-badge">Transport</span></td>
+                        <td>Subway Shibuya → Bakuro-yokoyama</td>
+                        <td class="price">¥300</td>
+                    </tr>
+                    <tr>
+                        <td><span class="category-badge">Tickets</span></td>
+                        <td>Shibuya Sky (online ticket, after 15:00)</td>
+                        <td class="price">¥3,400</td>
+                    </tr>
+                    <tr>
+                        <td><span class="category-badge">Meals</span></td>
+                        <td>Lunch: BASO</td>
+                        <td class="price">¥1,500</td>
+                    </tr>
+                    <tr>
+                        <td><span class="category-badge">Other</span></td>
+                        <td>Starbucks Roastery drinks</td>
+                        <td class="price">¥1,500</td>
+                    </tr>
+                    <tr>
+                        <td><span class="category-badge">Meals</span></td>
+                        <td>Dinner: Rikyu Beef Tongue</td>
+                        <td class="price">¥4,000</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- D3: 10/18(Mon) Hakone -->
+        <div id="d3" class="day-content">
+            <div class="day-header">
+                <h2>D3 | 10/18 (Mon) — Hakone: 6 kinds of transport</h2>
+                <div class="accommodation-box">
+                    <strong>🏨 Stay: </strong>Hakone Hotel
+                </div>
+            </div>
+
+            <h3 class="section-title">📍 Itinerary</h3>
+            <div class="itinerary-card">
+                <div class="time">07:40</div>
+                <div class="activity">Head out</div>
+                <div class="transport">Bakuro-yokoyama → Toei Shinjuku Line direct to Shinjuku (approx. 20 min)</div>
+                <div class="notes">Breakfast: Tokyo Hotel; recommend leaving large luggage at Tokyo Hotel</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">08:30</div>
+                <div class="activity">Shinjuku → Hakone-Yumoto</div>
+                <div class="transport">① Romancecar</div>
+                <div class="notes">Limited express ticket bought separately, reserve ahead</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">10:00</div>
+                <div class="activity">Arrive at Hakone-Yumoto, leave luggage at Hakone Hotel</div>
+                <div class="transport">3-minute walk</div>
+                <div class="notes">Luggage can be dropped off before check-in</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">10:20</div>
+                <div class="activity">Hakone-Yumoto → Gora</div>
+                <div class="transport">② Tozan Railway</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">11:05</div>
+                <div class="activity">Lunch: Tamura Ginkatsu-tei main store</div>
+                <div class="transport">2-min walk from Gora Station</div>
+                <div class="notes">No reservations, get a numbered ticket on site</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">12:10</div>
+                <div class="activity">Gora → Sounzan</div>
+                <div class="transport">③ Tozan Cable Car</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">12:30</div>
+                <div class="activity">Sounzan → Owakudani (eat black eggs, kuro-tamago)</div>
+                <div class="transport">④ Ropeway</div>
+                <div class="notes">Ropeway runs until 17:00</div>
+            </div>
+
+            <h3 class="section-title">💰 Cost breakdown</h3>
+            <table class="expense-table">
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Item</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="category-badge">Transport</span></td>
+                        <td>Toei Shinjuku Line Bakuro-yokoyama → Shinjuku</td>
+                        <td class="price">¥280</td>
+                    </tr>
+                    <tr>
+                        <td><span class="category-badge">Transport</span></td>
+                        <td>Hakone Free Pass 2-day</td>
+                        <td class="price">¥7,100</td>
+                    </tr>
+                    <tr>
+                        <td><span class="category-badge">Transport</span></td>
+                        <td>Romancecar limited express ticket</td>
+                        <td class="price">¥1,200</td>
+                    </tr>
+                    <tr>
+                        <td><span class="category-badge">Meals</span></td>
+                        <td>Lunch: Tamura Ginkatsu-tei</td>
+                        <td class="price">¥1,480</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- D4: 10/19(Tue) Atami -->
+        <div id="d4" class="day-content">
+            <div class="day-header">
+                <h2>D4 | 10/19 (Tue) — Hakone→Atami</h2>
+                <div class="accommodation-box">
+                    <strong>🏨 Stay: </strong>Atami Hotel (1 night, 2 meals)
+                </div>
+            </div>
+
+            <h3 class="section-title">📍 Itinerary</h3>
+            <div class="itinerary-card">
+                <div class="time">09:30</div>
+                <div class="activity">Check out → Hakone-Yumoto → Odawara → JR to Atami</div>
+                <div class="transport">Tozan Line (covered by Free Pass) → JR</div>
+                <div class="notes">Breakfast: confirm whether Hakone Hotel includes it</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">10:30</div>
+                <div class="activity">Arrive at Atami, store luggage (station)</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">11:00</div>
+                <div class="activity">Lunch: Gomihacchin LUSCA Atami branch (Hamamatsu gyoza)</div>
+                <div class="transport">Atami Station building 3F</div>
+                <div class="notes">11:00–21:00</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">12:15</div>
+                <div class="activity">Atami Castle (observation deck)</div>
+                <div class="transport">Bus to Korakuen → Ropeway → walk</div>
+                <div class="notes">9:00–17:00, last entry 16:30</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">14:45</div>
+                <div class="activity">Kinomiya Shrine (thousand-year-old camphor tree)</div>
+                <div class="transport">Bus→Atami Station→JR Ito Line→walk 5 min</div>
+            </div>
+
+            <h3 class="section-title">💰 Cost breakdown</h3>
+            <table class="expense-table">
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Item</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="category-badge">Transport</span></td>
+                        <td>JR Odawara → Atami</td>
+                        <td class="price">¥510</td>
+                    </tr>
+                    <tr>
+                        <td><span class="category-badge">Transport</span></td>
+                        <td>Bus Atami Station ⇄ Korakuen (round trip)</td>
+                        <td class="price">¥500</td>
+                    </tr>
+                    <tr>
+                        <td><span class="category-badge">Transport</span></td>
+                        <td>Atami Ropeway (round trip)</td>
+                        <td class="price">¥900</td>
+                    </tr>
+                    <tr>
+                        <td><span class="category-badge">Transport</span></td>
+                        <td>JR Atami ⇄ Kinomiya (round trip)</td>
+                        <td class="price">¥300</td>
+                    </tr>
+                    <tr>
+                        <td><span class="category-badge">Tickets</span></td>
+                        <td>Atami Castle</td>
+                        <td class="price">¥1,200</td>
+                    </tr>
+                    <tr>
+                        <td><span class="category-badge">Meals</span></td>
+                        <td>Lunch: Gomihacchin</td>
+                        <td class="price">¥1,500</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- D5: 10/20(Wed) Atami→Ueno -->
+        <div id="d5" class="day-content">
+            <div class="day-header">
+                <h2>D5 | 10/20 (Wed) — Atami snacks→Ueno</h2>
+                <div class="accommodation-box">
+                    <strong>🏨 Stay: </strong>Tokyo Hotel
+                </div>
+            </div>
+
+            <h3 class="section-title">📍 Itinerary</h3>
+            <div class="itinerary-card">
+                <div class="time">08:00</div>
+                <div class="activity">Breakfast: Atami Hotel</div>
+                <div class="notes">Yakiniku for lunch, so keep breakfast light</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">09:45</div>
+                <div class="activity">Heiwa-dori shopping street (right side)</div>
+                <div class="transport">Walk</div>
+                <div class="notes">Fried shrimp mayo stick→onsen manju→square cream puff</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">10:30</div>
+                <div class="activity">Nakamise-dori shopping street (left side), in front of the station</div>
+                <div class="transport">Walk</div>
+                <div class="notes">Butter red bean bun→Atami Pudding→cheese dessert</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">11:30</div>
+                <div class="activity">Pick up luggage, head to Shinagawa</div>
+                <div class="transport">Yokosuka Line to Shinagawa</div>
+            </div>
+
+            <h3 class="section-title">💰 Cost breakdown</h3>
+            <table class="expense-table">
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Item</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="category-badge">Other</span></td>
+                        <td>Atami Station lockers</td>
+                        <td class="price">¥700</td>
+                    </tr>
+                    <tr>
+                        <td><span class="category-badge">Meals</span></td>
+                        <td>Fried shrimp mayo stick</td>
+                        <td class="price">¥420</td>
+                    </tr>
+                    <tr>
+                        <td><span class="category-badge">Meals</span></td>
+                        <td>Onsen manju</td>
+                        <td class="price">¥150</td>
+                    </tr>
+                    <tr>
+                        <td><span class="category-badge">Meals</span></td>
+                        <td>Square cream puff</td>
+                        <td class="price">¥380</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- D6: 10/21(Thu) Nikko -->
+        <div id="d6" class="day-content">
+            <div class="day-header">
+                <h2>D6 | 10/21 (Thu) — Nikko Kegon Falls</h2>
+                <div class="accommodation-box">
+                    <strong>🏨 Stay: </strong>Tokyo Hotel
+                </div>
+            </div>
+
+            <h3 class="section-title">📍 Itinerary</h3>
+            <div class="itinerary-card">
+                <div class="time">07:00</div>
+                <div class="activity">Head out</div>
+                <div class="transport">Higashi-nihombashi → Asakusa Line to Asakusa → walk to Tobu Asakusa Station</div>
+                <div class="notes">Breakfast: convenience store rice balls bought the night before, eat on the train</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">07:30</div>
+                <div class="activity">Asakusa → Tobu-Nikko</div>
+                <div class="transport">Tobu limited express (approx. 2 hours)</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">09:30</div>
+                <div class="activity">Up the mountain</div>
+                <div class="transport">Bus via Irohazaka</div>
+                <div class="notes">Possible traffic jams in autumn foliage season</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">10:30</div>
+                <div class="activity">Kegon Falls, Lake Chuzenji</div>
+                <div class="notes">Observation deck elevator round trip ¥600</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">13:00</div>
+                <div class="activity">Lunch: Ganso Nikko Yuba Ryori Ebisuya</div>
+                <div class="transport">Next to the bus stop</div>
+                <div class="notes">Reservation required; last order 14:30; closed Tuesdays</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">14:30</div>
+                <div class="activity">Nikko Toshogu (Yomeimon Gate, Three Wise Monkeys, Sleeping Cat)</div>
+                <div class="transport">Walk</div>
+                <div class="notes">Apr–Oct last entry 16:30</div>
+            </div>
+
+            <h3 class="section-title">💰 Cost breakdown</h3>
+            <table class="expense-table">
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Item</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="category-badge">Transport</span></td>
+                        <td>Asakusa Line Higashi-nihombashi ⇄ Asakusa (round trip)</td>
+                        <td class="price">¥360</td>
+                    </tr>
+                    <tr>
+                        <td><span class="category-badge">Transport</span></td>
+                        <td>Tobu limited express Asakusa ⇄ Tobu-Nikko (round trip)</td>
+                        <td class="price">¥5,800</td>
+                    </tr>
+                    <tr>
+                        <td><span class="category-badge">Transport</span></td>
+                        <td>Bus Tobu-Nikko ⇄ Chuzenji Onsen (round trip)</td>
+                        <td class="price">¥2,500</td>
+                    </tr>
+                    <tr>
+                        <td><span class="category-badge">Tickets</span></td>
+                        <td>Kegon Falls observation deck elevator</td>
+                        <td class="price">¥600</td>
+                    </tr>
+                    <tr>
+                        <td><span class="category-badge">Tickets</span></td>
+                        <td>Nikko Toshogu</td>
+                        <td class="price">¥1,600</td>
+                    </tr>
+                    <tr>
+                        <td><span class="category-badge">Meals</span></td>
+                        <td>Lunch: Ebisuya (set B)</td>
+                        <td class="price">¥3,500</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- D7: 10/22(Fri) Makuhari -->
+        <div id="d7" class="day-content">
+            <div class="day-header">
+                <h2>D7 | 10/22 (Fri) — Makuhari outlet</h2>
+                <div class="accommodation-box">
+                    <strong>🏨 Stay: </strong>Tokyo Hotel
+                </div>
+            </div>
+
+            <h3 class="section-title">📍 Itinerary</h3>
+            <div class="itinerary-card">
+                <div class="time">09:00</div>
+                <div class="activity">Breakfast: Tokyo Hotel</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">10:00</div>
+                <div class="activity">Head to Makuhari</div>
+                <div class="transport">Kodemmacho → Hibiya Line to Hatchobori → Keiyo Line to Kaihin-Makuhari (approx. 45 min)</div>
+                <div class="notes">Transfer at Hatchobori to avoid the long Keiyo Line walk at Tokyo Station</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">10:45–18:00</div>
+                <div class="activity">Mitsui outlet Makuhari (full day)</div>
+                <div class="notes">Lunch: grab something in the outlet; shopping not included in budget</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">18:00</div>
+                <div class="activity">Back to Tokyo</div>
+                <div class="transport">Keiyo Line to Tokyo Station (approx. 30 min)</div>
+            </div>
+
+            <h3 class="section-title">💰 Cost breakdown</h3>
+            <table class="expense-table">
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Item</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="category-badge">Transport</span></td>
+                        <td>Hibiya Line + Keiyo Line round trip</td>
+                        <td class="price">¥1,600</td>
+                    </tr>
+                    <tr>
+                        <td><span class="category-badge">Meals</span></td>
+                        <td>Lunch: inside outlet</td>
+                        <td class="price">¥2,000</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- D8: 10/23(Sat) Last day -->
+        <div id="d8" class="day-content">
+            <div class="day-header">
+                <h2>D8 | 10/23 (Sat) — Tokyo highlights tour</h2>
+                <div class="accommodation-box">
+                    <strong>🏨 Stay: </strong>Tokyo Hotel
+                </div>
+            </div>
+
+            <h3 class="section-title">📍 Itinerary</h3>
+            <div class="itinerary-card">
+                <div class="time">08:30</div>
+                <div class="activity">Head out</div>
+                <div class="transport">Higashi-nihombashi → Asakusa Line direct to Asakusa</div>
+                <div class="notes">Breakfast: Tokyo Hotel</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">09:00</div>
+                <div class="activity">Senso-ji, Kaminarimon, Nakamise-dori</div>
+                <div class="transport">Walk</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">11:00</div>
+                <div class="activity">Tokyo Skytree</div>
+                <div class="transport">Asakusa Line one stop to Oshiage</div>
+                <div class="notes">Observation deck optional</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">12:30</div>
+                <div class="activity">Lunch: Ningyocho Imahan main store (sukiyaki)</div>
+                <div class="transport">Oshiage → Asakusa Line direct to Ningyocho</div>
+                <div class="notes">Bookable on TableCheck; reconfirm Saturday lunch menu</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">16:45</div>
+                <div class="activity">Azabudai Hills Sky Room Cafe & Bar (34F)</div>
+                <div class="transport">Ginza → Hibiya Line to Kamiyacho</div>
+                <div class="notes">No reservations; service charge ¥500 + at least one drink per person</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">18:15</div>
+                <div class="activity">Dinner: Ginza Kagari (chicken paitan ramen)</div>
+                <div class="transport">Kamiyacho → Hibiya Line back to Ginza</div>
+                <div class="notes">No reservations; main store cash only; busy on Saturday evenings</div>
+            </div>
+
+            <h3 class="section-title">💰 Cost breakdown</h3>
+            <table class="expense-table">
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Item</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="category-badge">Transport</span></td>
+                        <td>Asakusa Line Higashi-nihombashi → Asakusa</td>
+                        <td class="price">¥180</td>
+                    </tr>
+                    <tr>
+                        <td><span class="category-badge">Transport</span></td>
+                        <td>Asakusa Line Asakusa → Oshiage</td>
+                        <td class="price">¥180</td>
+                    </tr>
+                    <tr>
+                        <td><span class="category-badge">Transport</span></td>
+                        <td>Asakusa Line Oshiage → Ningyocho</td>
+                        <td class="price">¥220</td>
+                    </tr>
+                    <tr>
+                        <td><span class="category-badge">Transport</span></td>
+                        <td>Hibiya Line Ginza ⇄ Kamiyacho (round trip)</td>
+                        <td class="price">¥360</td>
+                    </tr>
+                    <tr>
+                        <td><span class="category-badge">Tickets</span></td>
+                        <td>Tokyo Skytree observation deck (optional)</td>
+                        <td class="price">¥2,500</td>
+                    </tr>
+                    <tr>
+                        <td><span class="category-badge">Meals</span></td>
+                        <td>Lunch: Ningyocho Imahan main store</td>
+                        <td class="price">¥5,500</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- D9: 10/24(Sun) Going home -->
+        <div id="d9" class="day-content">
+            <div class="day-header">
+                <h2>D9 | 10/24 (Sun) — Return to Taiwan</h2>
+                <div class="accommodation-box">
+                    <strong>🏨 Stay: </strong>Return to Taiwan
+                </div>
+            </div>
+
+            <h3 class="section-title">📍 Itinerary</h3>
+            <div class="itinerary-card">
+                <div class="time">Morning</div>
+                <div class="activity">Breakfast: Tokyo Hotel</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">Approx. 4 hrs before flight</div>
+                <div class="activity">Check out, head to airport</div>
+                <div class="transport">JR Sobu Rapid Line, Bakurocho direct to Narita</div>
+            </div>
+
+            <div class="itinerary-card">
+                <div class="time">2.5 hrs before flight</div>
+                <div class="activity">Arrive at airport, check in, tax refund, browse duty-free shops</div>
+                <div class="notes">T3 is about another 15-minute walk from T2</div>
+            </div>
+
+            <h3 class="section-title">💰 Cost breakdown</h3>
+            <table class="expense-table">
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Item</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="category-badge">Transport</span></td>
+                        <td>JR Bakurocho → Narita Airport</td>
+                        <td class="price">¥1,340</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="photo-section">
+            <h3 class="section-title">📸 Sights and food photos</h3>
+            <p style="color: var(--text-light); margin-bottom: 1rem;">Click a box below to upload a photo</p>
+            <div class="photo-grid">
+                <div class="photo-item">
+                    <div class="photo-placeholder">
+                        <span>📷</span>
+                        <p>Narita Airport</p>
+                    </div>
+                    <div class="photo-label">D1</div>
+                </div>
+                <div class="photo-item">
+                    <div class="photo-placeholder">
+                        <span>📷</span>
+                        <p>Meiji Shrine</p>
+                    </div>
+                    <div class="photo-label">D2</div>
+                </div>
+                <div class="photo-item">
+                    <div class="photo-placeholder">
+                        <span>📷</span>
+                        <p>Hakone scenery</p>
+                    </div>
+                    <div class="photo-label">D3</div>
+                </div>
+                <div class="photo-item">
+                    <div class="photo-placeholder">
+                        <span>📷</span>
+                        <p>Atami Castle</p>
+                    </div>
+                    <div class="photo-label">D4</div>
+                </div>
+                <div class="photo-item">
+                    <div class="photo-placeholder">
+                        <span>📷</span>
+                        <p>Atami snacks</p>
+                    </div>
+                    <div class="photo-label">D5</div>
+                </div>
+                <div class="photo-item">
+                    <div class="photo-placeholder">
+                        <span>📷</span>
+                        <p>Kegon Falls</p>
+                    </div>
+                    <div class="photo-label">D6</div>
+                </div>
+                <div class="photo-item">
+                    <div class="photo-placeholder">
+                        <span>📷</span>
+                        <p>Makuhari outlet</p>
+                    </div>
+                    <div class="photo-label">D7</div>
+                </div>
+                <div class="photo-item">
+                    <div class="photo-placeholder">
+                        <span>📷</span>
+                        <p>Senso-ji</p>
+                    </div>
+                    <div class="photo-label">D8</div>
+                </div>
+                <div class="photo-item">
+                    <div class="photo-placeholder">
+                        <span>📷</span>
+                        <p>Shibuya Sky</p>
+                    </div>
+                    <div class="photo-label">D2</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>✈️ Tokyo travel itinerary</p>
+        <p style="font-size: 0.9rem; margin-top: 0.5rem;">Have a pleasant trip!</p>
+    </div>
+
+    <script>
+        // Tab switching functionality
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const dayContents = document.querySelectorAll('.day-content');
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const dayId = button.getAttribute('data-day');
+
+                // Remove active class from all
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                dayContents.forEach(content => content.classList.remove('active'));
+
+                // Add active class to clicked button and corresponding content
+                button.classList.add('active');
+                document.getElementById(dayId).classList.add('active');
+
+                // Scroll to top
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
+
+        // Photo upload functionality
+        const photoItems = document.querySelectorAll('.photo-item');
+        photoItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const input = document.createElement('input');
+                input.type = 'file';
+                input.accept = 'image/*';
+                input.onchange = (e) => {
+                    const file = e.target.files[0];
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = (event) => {
+                            // Create img element
+                            const img = document.createElement('img');
+                            img.src = event.target.result;
+
+                            // Clear placeholder and add image
+                            item.innerHTML = '';
+                            item.appendChild(img);
+
+                            // Re-add label
+                            const label = document.createElement('div');
+                            label.className = 'photo-label';
+                            label.textContent = item.querySelector('.photo-label')?.textContent || 'Photos';
+                            item.appendChild(label);
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                };
+                input.click();
+            });
+        });
+    </script>
+</body>
+</html>
