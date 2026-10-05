@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>東京 9 天行程地圖（10/16～10/24）</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; font-family: -apple-system, "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif; color: #222; }
+  #app { display: flex; height: 100%; }
+  #side { width: 360px; flex: none; display: flex; flex-direction: column; border-right: 1px solid #ddd; background: #fafafa; }
+  #map { flex: 1; }
+  header { padding: 14px 16px 10px; border-bottom: 1px solid #e5e5e5; background: #fff; }
+  header h1 { font-size: 17px; margin: 0 0 4px; }
+  header p { margin: 0; font-size: 12px; color: #777; }
+  #days { display: flex; flex-wrap: wrap; gap: 6px; padding: 10px 16px; background: #fff; border-bottom: 1px solid #e5e5e5; }
+  #days button { border: 1px solid #ccc; background: #fff; border-radius: 14px; padding: 4px 10px; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 5px; }
+  #days button .dot { width: 10px; height: 10px; border-radius: 50%; }
+  #days button.on { color: #fff; border-color: transparent; }
+  #filters { display: flex; gap: 12px; padding: 8px 16px; font-size: 13px; background: #fff; border-bottom: 1px solid #e5e5e5; }
+  #filters label { cursor: pointer; user-select: none; }
+  #list { flex: 1; overflow-y: auto; padding: 4px 0 16px; }
+  .day-h { padding: 12px 16px 6px; font-weight: 600; font-size: 14px; display: flex; gap: 8px; align-items: baseline; cursor: pointer; }
+  .day-h .bar { width: 4px; align-self: stretch; border-radius: 2px; }
+  .day-h small { font-weight: 400; color: #777; }
+  .day-note { margin: 0 16px 6px 28px; font-size: 12px; color: #8a6d00; background: #fff8dc; border-radius: 4px; padding: 4px 8px; }
+  .stop { display: flex; gap: 8px; padding: 5px 16px 5px 28px; font-size: 13px; cursor: pointer; align-items: flex-start; }
+  .stop:hover { background: #eef3ff; }
+  .stop .t { width: 54px; flex: none; color: #666; font-variant-numeric: tabular-nums; font-size: 12px; padding-top: 2px; }
+  .stop .ic { width: 20px; height: 20px; flex: none; border-radius: 50%; color: #fff; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+  .stop .ic.sq { border-radius: 4px; }
+  .stop .ic.hotel { background: #333 !important; border-radius: 4px; font-size: 11px; }
+  .stop .ic.transit { background: #fff !important; border: 2px solid #999; color: #999; width: 12px; height: 12px; margin: 4px; }
+  .stop .by { display: block; color: #888; font-size: 11px; }
+  #legend { padding: 8px 16px; font-size: 12px; color: #555; border-top: 1px solid #e5e5e5; background: #fff; line-height: 1.7; }
+  #legend .sw { display: inline-block; vertical-align: middle; margin-right: 4px; }
+
+  /* 地圖圖釘 */
+  .pin { width: 26px; height: 26px; border-radius: 50%; color: #fff; font: 700 12px/22px sans-serif; text-align: center; border: 2px solid #fff; box-shadow: 0 1px 4px rgba(0,0,0,.45); position: relative; }
+  .pin.food { border-radius: 4px; }
+  .pin.cand { opacity: .75; border-style: dashed; }
+  .pin-hotel { width: 30px; height: 30px; border-radius: 6px; background: #222; color: #fff; font-size: 16px; line-height: 26px; text-align: center; border: 2px solid #fff; box-shadow: 0 1px 4px rgba(0,0,0,.5); }
+  .pin-transit { width: 12px; height: 12px; border-radius: 50%; background: #fff; border: 3px solid #666; }
+  .leaflet-popup-content { font-size: 13px; line-height: 1.5; min-width: 200px; }
+  .pop-h { font-weight: 700; font-size: 14px; margin-bottom: 2px; }
+  .pop-d { color: #fff; font-size: 11px; padding: 1px 6px; border-radius: 8px; margin-right: 4px; display: inline-block; margin-bottom: 2px; }
+  .pop-row { margin-top: 4px; }
+  .pop-row b { color: #555; font-weight: 600; }
+  .pop-gm { display: inline-block; margin-top: 6px; }
+
+  @media (max-width: 760px) {
+    #app { flex-direction: column-reverse; }
+    #side { width: 100%; height: 48%; border-right: 0; border-top: 1px solid #ddd; }
+    #map { height: 52%; }
+    #legend { display: none; }
+  }
+</style>
+</head>
+<body>
+<div id="app">
+  <aside id="side">
+    <header>
+      <h1>東京 9 天行程地圖</h1>
+      <p>10/16（六）～10/24（日）・5 位大人・資料來源：東京9天行程_v5.xlsx</p>
+    </header>
+    <div id="days"></div>
+    <div id="filters">
+      <label><input type="checkbox" data-type="sight" checked> 📍 景點</label>
+      <label><input type="checkbox" data-type="food" checked> 🍴 餐廳</label>
+      <label><input type="checkbox" data-type="hotel" checked> 🏨 飯店</label>
+      <label><input type="checkbox" data-type="transit" checked> ◯ 車站</label>
+    </div>
+    <div id="list"></div>
+    <div id="legend">
+      <span class="sw" style="width:22px;border-top:4px solid #555"></span>步行・同區移動
+      <span class="sw" style="width:22px;border-top:4px dashed #555;margin-left:10px"></span>電車・巴士・纜車<br>
+      圓形＝景點、方形＝餐廳，數字是當天順序；虛線框＝候選餐廳（未定）。<br>
+      圖釘為概略位置，出發前請用 popup 裡的 Google 地圖連結確認。
+    </div>
+  </aside>
+  <div id="map"></div>
+</div>
+
+<script>
+// ---------- 地點 ----------
+// type: sight 景點 / food 餐廳 / hotel 飯店 / transit 車站
+// q: Google 地圖搜尋字串
+const P = {
+  // 飯店
+  toyoko:     { name: "東京飯店", type: "hotel", ll: [35.6927, 139.7829], q: "東京飯店", note: "馬喰町站步行 3 分鐘；雙人房 3 間；免費早餐" },
+  fujiya:     { name: "箱根飯店（待確認）", type: "hotel", ll: [35.2335, 139.1040], q: "箱根飯店", note: "箱根湯本站步行 3 分鐘；入住前可寄放行李；早餐是否含待確認" },
+  juraku:     { name: "熱海飯店（一泊二食）", type: "hotel", ll: [35.1027, 139.0762], q: "熱海飯店", note: "一泊二食，晚餐會席、泡溫泉" },
+
+  // 車站・轉乘點
+  narita:     { name: "成田機場", type: "transit", ll: [35.7720, 140.3929], q: "成田国際空港", note: "T1「成田空港」站；T2／T3「空港第2ビル」站" },
+  shinjuku:   { name: "新宿站（浪漫特快）", type: "transit", ll: [35.6896, 139.7006], q: "新宿駅" },
+  yumoto:     { name: "箱根湯本站", type: "transit", ll: [35.2329, 139.1054], q: "箱根湯本駅" },
+  gora:       { name: "強羅站", type: "transit", ll: [35.2497, 139.0505], q: "強羅駅" },
+  sounzan:    { name: "早雲山站", type: "transit", ll: [35.2443, 139.0430], q: "早雲山駅" },
+  motohakone: { name: "元箱根港", type: "transit", ll: [35.2000, 139.0262], q: "元箱根港" },
+  odawara:    { name: "小田原站", type: "transit", ll: [35.2564, 139.1553], q: "小田原駅" },
+  atami:      { name: "熱海站", type: "transit", ll: [35.1040, 139.0779], q: "熱海駅", note: "D4 寄放行李；D5 寄物櫃" },
+  atamibus:   { name: "熱海後樂園（空中纜車）", type: "transit", ll: [35.0928, 139.0786], q: "熱海ロープウェイ" },
+  kinomiyast: { name: "來宮站", type: "transit", ll: [35.1058, 139.0716], q: "来宮駅" },
+  shinagawa:  { name: "品川站", type: "transit", ll: [35.6285, 139.7387], q: "品川駅" },
+  okachi:     { name: "仲御徒町站", type: "transit", ll: [35.7064, 139.7769], q: "仲御徒町駅" },
+  tobuasa:    { name: "東武淺草站", type: "transit", ll: [35.7116, 139.7978], q: "浅草駅 東武" },
+  tobunikko:  { name: "東武日光站", type: "transit", ll: [36.7480, 139.6198], q: "東武日光駅" },
+  kaihin:     { name: "海濱幕張站", type: "transit", ll: [35.6483, 140.0418], q: "海浜幕張駅" },
+  tokyo:      { name: "東京站", type: "transit", ll: [35.6812, 139.7671], q: "東京駅" },
+
+  // 景點
+  meiji:      { name: "明治神宮", type: "sight", ll: [35.6764, 139.6993], q: "明治神宮" },
+  roastery:   { name: "Starbucks Reserve Roastery 東京", type: "sight", ll: [35.6493, 139.6936], q: "スターバックス リザーブ ロースタリー 東京", note: "中目黑；週日可能要排隊入場" },
+  shibuyasky: { name: "澀谷 SKY", type: "sight", ll: [35.6585, 139.7023], q: "SHIBUYA SKY", note: "夕陽和夜景；網路票 15:00 後 3,400 日圓，先訂" },
+  owakudani:  { name: "大涌谷", type: "sight", ll: [35.2440, 139.0195], q: "大涌谷", note: "空中纜車營業到 17:00" },
+  pirate:     { name: "箱根海賊船（桃源台港）", type: "sight", ll: [35.2486, 139.0058], q: "桃源台港", note: "遊蘆之湖 → 元箱根港" },
+  hakonejinja:{ name: "箱根神社（湖上鳥居）", type: "sight", ll: [35.2048, 139.0247], q: "箱根神社", note: "鳥居隊伍太長就在旁邊拍" },
+  atamijo:    { name: "熱海城（展望台）", type: "sight", ll: [35.0914, 139.0797], q: "熱海城", note: "9:00～17:00，最後入場 16:30；大人 1,200 日圓" },
+  kinomiya:   { name: "來宮神社（千年大樟樹）", type: "sight", ll: [35.1045, 139.0703], q: "來宮神社" },
+  heiwa:      { name: "平和通り名店街", type: "sight", ll: [35.1037, 139.0771], q: "熱海 平和通り名店街", note: "車站出來右邊" },
+  nakamise:   { name: "仲見世通り商店街", type: "sight", ll: [35.1033, 139.0787], q: "熱海 仲見世通り商店街", note: "車站出來左邊" },
+  ameyoko:    { name: "上野阿美橫町", type: "sight", ll: [35.7097, 139.7750], q: "アメ横" },
+  uenopark:   { name: "上野公園", type: "sight", ll: [35.7146, 139.7732], q: "上野恩賜公園" },
+  kegon:      { name: "華嚴瀑布・中禪寺湖", type: "sight", ll: [36.7381, 139.5019], q: "華厳ノ滝", note: "觀瀑台電梯往返 600 日圓；楓葉季伊呂波坂可能塞車" },
+  toshogu:    { name: "日光東照宮", type: "sight", ll: [36.7581, 139.5989], q: "日光東照宮", note: "陽明門、三猿、眠貓；4～10 月最後入場 16:30；大人 1,600 日圓" },
+  outlet:     { name: "三井 outlet 幕張", type: "sight", ll: [35.6467, 140.0368], q: "三井アウトレットパーク 幕張", note: "營業時間待確認" },
+  sensoji:    { name: "淺草寺・雷門・仲見世通", type: "sight", ll: [35.7128, 139.7966], q: "浅草寺" },
+  skytree:    { name: "晴空塔", type: "sight", ll: [35.7101, 139.8107], q: "東京スカイツリー", note: "展望台為選配（約 2,500 日圓）" },
+  ginza:      { name: "銀座", type: "sight", ll: [35.6717, 139.7650], q: "銀座四丁目交差点" },
+  azabudai:   { name: "麻布台之丘 Sky Room Cafe & Bar（34 樓）", type: "sight", ll: [35.6605, 139.7398], q: "麻布台ヒルズ スカイルーム", note: "正對東京鐵塔；不能預約；服務費 500 ＋ 每人至少一杯；只收卡或電子支付" },
+  narita_dfs: { name: "成田機場 免稅店", type: "sight", ll: [35.7716, 140.3922], q: "成田国際空港", note: "辦理登機、退稅；T3 要從 T2 再走約 15 分鐘" },
+
+  // 餐廳
+  baso:       { name: "BASO OMOTESANDO（粗蕎麥沾麵）", type: "food", ll: [35.6697, 139.7052], q: "BASO OMOTESANDO", note: "明治神宮前站 7 號出口步行 2 分；不能預約，先買餐券排隊；5 人可能分開坐" },
+  rikyu:      { name: "利久牛舌 澀谷 Hikarie 店", type: "food", ll: [35.6590, 139.7038], q: "牛たん炭焼 利久 渋谷ヒカリエ店", note: "建議先訂位" },
+  ginkatsu:   { name: "田むら銀かつ亭 本店（豆腐かつ煮定食）", type: "food", ll: [35.2490, 139.0514], q: "田むら銀かつ亭", note: "強羅站步行 2 分；現場領號碼牌；排太長可去對面舊店或改大涌谷吃" },
+  kurotamago: { name: "大涌谷 黑蛋", type: "food", ll: [35.2434, 139.0211], q: "大涌谷くろたまご館" },
+  gomihachi:  { name: "五味八珍 LUSCA 熱海店（濱松餃子）", type: "food", ll: [35.1044, 139.0774], q: "五味八珍 ラスカ熱海店", note: "熱海站大樓 3 樓；11:00～21:00" },
+  maruten:    { name: "炸蝦美乃滋棒（まる天）", type: "food", ll: [35.1035, 139.0768], q: "まる天 熱海 平和通り", note: "9:00 開" },
+  izumiya:    { name: "溫泉饅頭（泉屋）", type: "food", ll: [35.1040, 139.0769], q: "泉屋 熱海 温泉まんじゅう" },
+  choux:      { name: "方形泡芙（熱海スクエアシュークリーム）", type: "food", ll: [35.1032, 139.0773], q: "熱海スクエアシュークリーム" },
+  buttern:    { name: "奶油紅豆麵包（熱海ばたーあん）", type: "food", ll: [35.1035, 139.0783], q: "熱海ばたーあん", note: "10:00 開" },
+  purin:      { name: "熱海布丁", type: "food", ll: [35.1029, 139.0790], q: "熱海プリン", note: "常排隊" },
+  milcheese:  { name: "起司甜點 木桶布丁（熱海ミルチーズ）", type: "food", ll: [35.1031, 139.0784], q: "熱海ミルチーズ" },
+  jojoen:     { name: "敘敘苑 上野丸井店（午間套餐）", type: "food", ll: [35.7088, 139.7735], q: "叙々苑 上野丸井店", note: "要預約；午餐時段要再確認" },
+  ebisuya:    { name: "元祖日光ゆば料理 恵比寿家", type: "food", ll: [36.7497, 139.6040], q: "恵比寿家 日光 ゆば", note: "巴士「日光郷土センター前」旁；要預約；最後點餐 14:30；週二公休" },
+  sakaeya:    { name: "炸湯波饅頭（さかえや）", type: "food", ll: [36.7486, 139.6176], q: "さかえや 日光 揚げゆばまんじゅう", note: "東武日光站前" },
+  midori:     { name: "（候選）美登利壽司 銀座店", type: "food", cand: true, ll: [35.6688, 139.7598], q: "美登利寿司 銀座店", note: "平均約 2,500；TableCheck 可訂" },
+  hanamaru:   { name: "（候選）根室花まる KITTE丸の內", type: "food", cand: true, ll: [35.6796, 139.7648], q: "根室花まる KITTE丸の内店", note: "現場抽號碼" },
+  imahan:     { name: "人形町今半 本店（壽喜燒）", type: "food", ll: [35.6860, 139.7829], q: "人形町今半 本店", note: "TableCheck 可預約；週六午餐菜單要再確認" },
+  kagari:     { name: "銀座篝 本店（雞白湯 SOBA）", type: "food", ll: [35.6722, 139.7643], q: "銀座 篝 本店", note: "不能預約；本店只收現金；湯賣完提早打烊" },
+};
+
+// ---------- 每日行程 ----------
+// by：怎麼到這一站；ride:true 畫虛線（電車、巴士、纜車、船）
+const DAYS = [
+  { d: "D1", date: "10/16（六）", title: "抵達東京", color: "#e6194b", stops: [
+    { p: "narita", t: "下午", text: "抵達成田，入境、領行李" },
+    { p: "toyoko", t: "傍晚", text: "入住；晚餐：附近超市、超商", by: "JR 總武快速線直達馬喰町（約 1.5 小時）", ride: true },
+  ]},
+  { d: "D2", date: "10/17（日）", title: "明治神宮 → 澀谷", color: "#f58231", stops: [
+    { p: "toyoko", t: "08:30", text: "出門；早餐：東京飯店" },
+    { p: "meiji", t: "09:00", text: "明治神宮", by: "新宿線 → 新宿三丁目 → 副都心線到明治神宮前（約 35 分）", ride: true },
+    { p: "baso", t: "11:00", text: "午餐：BASO", by: "步行" },
+    { p: "roastery", t: "14:00", text: "星巴克烘焙工坊", by: "澀谷 → 東急東橫線到中目黑", ride: true },
+    { p: "shibuyasky", t: "16:30", text: "澀谷 SKY（夕陽、夜景）", by: "中目黑 → 澀谷", ride: true },
+    { p: "rikyu", t: "18:30", text: "晚餐：利久牛舌", by: "澀谷站旁" },
+    { p: "toyoko", t: "晚上", text: "回飯店", by: "副都心線 → 新宿三丁目 → 新宿線", ride: true },
+  ]},
+  { d: "D3", date: "10/18（一）", title: "箱根：六種交通工具", color: "#3cb44b",
+    note: "晚餐待定：居酒屋 だいちゃん／山そば／はつ花／箱根居酒屋 鈴鹿／はこね 中村家／麺処 彩／智路留／飯店內居酒屋 箱根路", stops: [
+    { p: "toyoko", t: "07:40", text: "出門；大行李建議寄放東京飯店" },
+    { p: "shinjuku", t: "08:30", text: "① 浪漫特快 → 箱根湯本", by: "都營新宿線直達新宿（約 20 分）", ride: true },
+    { p: "fujiya", t: "10:00", text: "抵達箱根湯本，寄放行李", by: "浪漫特快 ＋ 步行 3 分", ride: true },
+    { p: "gora", t: "10:20", text: "② 登山電車到強羅", by: "② 登山電車", ride: true },
+    { p: "ginkatsu", t: "11:05", text: "午餐：田むら銀かつ亭", by: "強羅站步行 2 分" },
+    { p: "sounzan", t: "12:10", text: "③ 登山纜車到早雲山", by: "③ 登山纜車", ride: true },
+    { p: "owakudani", t: "12:30", text: "大涌谷", by: "④ 空中纜車", ride: true },
+    { p: "kurotamago", t: "", text: "吃黑蛋、霜淇淋", by: "步行" },
+    { p: "pirate", t: "13:30", text: "⑤ 海賊船遊蘆之湖", by: "④ 空中纜車到桃源台", ride: true },
+    { p: "motohakone", t: "", text: "元箱根港下船", by: "⑤ 海賊船", ride: true },
+    { p: "hakonejinja", t: "15:00", text: "箱根神社", by: "步行" },
+    { p: "fujiya", t: "17:00", text: "入住箱根飯店；晚餐待定", by: "⑥ 登山巴士（16:15 出發）", ride: true },
+  ]},
+  { d: "D4", date: "10/19（二）", title: "箱根 → 熱海", color: "#008080", stops: [
+    { p: "fujiya", t: "09:30", text: "退房；早餐確認是否含" },
+    { p: "odawara", t: "", text: "轉 JR", by: "登山線（周遊券可搭）", ride: true },
+    { p: "atami", t: "10:30", text: "抵達熱海，車站寄放行李", by: "JR", ride: true },
+    { p: "gomihachi", t: "11:00", text: "午餐：五味八珍 濱松餃子", by: "車站大樓 3 樓" },
+    { p: "atamibus", t: "", text: "搭空中纜車", by: "巴士到後樂園（約 10 分）", ride: true },
+    { p: "atamijo", t: "12:15", text: "熱海城（展望台）", by: "空中纜車約 3 分 → 步行 3 分", ride: true },
+    { p: "atami", t: "", text: "回熱海站", by: "巴士", ride: true },
+    { p: "kinomiyast", t: "", text: "來宮站", by: "JR 伊東線一站", ride: true },
+    { p: "kinomiya", t: "14:45", text: "來宮神社", by: "步行 5 分" },
+    { p: "juraku", t: "16:00", text: "入住熱海飯店；晚餐、泡溫泉", by: "回熱海站取行李，步行到飯店" },
+  ]},
+  { d: "D5", date: "10/20（三）", title: "熱海小吃 → 敘敘苑 → 上野", color: "#4363d8",
+    note: "晚餐待定：中午吃燒肉，晚上可簡單吃（阿美橫町、飯店附近、超市）", stops: [
+    { p: "juraku", t: "08:00", text: "早餐（吃輕一點）；09:30 退房" },
+    { p: "atami", t: "09:30", text: "行李放熱海站寄物櫃", by: "步行" },
+    { p: "heiwa", t: "09:45", text: "平和通り名店街", by: "步行" },
+    { p: "maruten", t: "", text: "炸蝦美乃滋棒", by: "步行" },
+    { p: "izumiya", t: "", text: "溫泉饅頭", by: "步行" },
+    { p: "choux", t: "", text: "方形泡芙", by: "步行" },
+    { p: "nakamise", t: "10:30", text: "仲見世通り商店街", by: "步行" },
+    { p: "buttern", t: "", text: "奶油紅豆麵包", by: "步行" },
+    { p: "purin", t: "", text: "熱海布丁", by: "步行" },
+    { p: "milcheese", t: "", text: "起司甜點 木桶布丁", by: "步行" },
+    { p: "atami", t: "11:30", text: "取行李，前往月台", by: "步行" },
+    { p: "shinagawa", t: "", text: "轉橫須賀線", by: "東海道本線", ride: true },
+    { p: "toyoko", t: "", text: "行李放東京飯店", by: "橫須賀線到馬喰町", ride: true },
+    { p: "okachi", t: "", text: "仲御徒町站", by: "小傳馬町 → 日比谷線（約 6 分）", ride: true },
+    { p: "jojoen", t: "13:30", text: "午餐：敘敘苑 午間套餐", by: "車站旁" },
+    { p: "ameyoko", t: "15:00", text: "上野阿美橫町", by: "步行" },
+    { p: "uenopark", t: "", text: "上野公園", by: "步行" },
+    { p: "toyoko", t: "晚上", text: "晚餐待定，回飯店", by: "地鐵", ride: true },
+  ]},
+  { d: "D6", date: "10/21（四）", title: "日光：華嚴瀑布 ＋ 東照宮", color: "#911eb4", stops: [
+    { p: "toyoko", t: "07:00", text: "出門；超商飯糰車上吃" },
+    { p: "tobuasa", t: "07:30", text: "東武特急 → 東武日光", by: "東日本橋 → 淺草線到淺草，步行", ride: true },
+    { p: "tobunikko", t: "09:30", text: "轉巴士上山", by: "東武特急（約 2 小時）", ride: true },
+    { p: "kegon", t: "10:30", text: "華嚴瀑布、中禪寺湖", by: "巴士經伊呂波坂", ride: true },
+    { p: "ebisuya", t: "13:00", text: "午餐：恵比寿家 湯波料理", by: "12:15 巴士下山到「日光郷土センター前」", ride: true },
+    { p: "toshogu", t: "14:30", text: "日光東照宮", by: "步行" },
+    { p: "sakaeya", t: "17:00", text: "炸湯波饅頭，回東武日光站", by: "巴士或步行", ride: true },
+    { p: "tobunikko", t: "17:00 後", text: "東武特急回淺草", by: "步行" },
+    { p: "toyoko", t: "晚上", text: "晚餐：超市", by: "東武特急 → 淺草 → 淺草線", ride: true },
+  ]},
+  { d: "D7", date: "10/22（五）", title: "幕張 outlet", color: "#f032e6",
+    note: "晚餐壽司待定：候選為美登利壽司 銀座店、根室花まる KITTE丸の內（虛線框圖釘）", stops: [
+    { p: "toyoko", t: "10:00", text: "出門；早餐：東京飯店" },
+    { p: "kaihin", t: "", text: "海濱幕張站", by: "日比谷線到八丁堀 → 京葉線（約 45 分）", ride: true },
+    { p: "outlet", t: "10:45", text: "三井 outlet 幕張（到 18:00）", by: "步行" },
+    { p: "tokyo", t: "18:00", text: "回東京", by: "京葉線（約 30 分）", ride: true },
+    { p: "midori", t: "19:00", text: "晚餐壽司（候選）", cand: true },
+    { p: "hanamaru", t: "19:00", text: "晚餐壽司（候選）", cand: true },
+    { p: "toyoko", t: "晚上", text: "回飯店", ride: true },
+  ]},
+  { d: "D8", date: "10/23（六）", title: "淺草 → 晴空塔 → 人形町 → 銀座 → 麻布台", color: "#9a6324", stops: [
+    { p: "toyoko", t: "08:30", text: "出門；早餐：東京飯店" },
+    { p: "sensoji", t: "09:00", text: "淺草寺、雷門、仲見世通", by: "東日本橋 → 淺草線直達淺草", ride: true },
+    { p: "skytree", t: "11:00", text: "晴空塔", by: "淺草線一站到押上", ride: true },
+    { p: "imahan", t: "12:30", text: "午餐：人形町今半 壽喜燒", by: "淺草線直達人形町（約 15 分）", ride: true },
+    { p: "ginza", t: "下午", text: "銀座", by: "淺草線到東銀座", ride: true },
+    { p: "azabudai", t: "16:45", text: "麻布台 Sky Room", by: "日比谷線到神谷町（約 7 分）", ride: true },
+    { p: "kagari", t: "18:15", text: "晚餐：銀座篝", by: "日比谷線回銀座", ride: true },
+    { p: "toyoko", t: "晚上", text: "回飯店、整理行李", by: "日比谷線直達小傳馬町", ride: true },
+  ]},
+  { d: "D9", date: "10/24（日）", title: "回台", color: "#000075",
+    note: "午餐待定（看航班時間）", stops: [
+    { p: "toyoko", t: "早上", text: "早餐；起飛前約 4 小時退房" },
+    { p: "narita_dfs", t: "", text: "辦登機、退稅、逛免稅店（起飛前 2.5 小時到）", by: "JR 總武快速線，馬喰町直達成田", ride: true },
+  ]},
+];
+
+// ---------- 地圖 ----------
+const map = L.map("map", { zoomControl: true });
+L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+  maxZoom: 19,
+  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+}).addTo(map);
+
+const gmaps = q => "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(q);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const typeLabel = { sight: "景點", food: "餐廳", hotel: "飯店", transit: "車站" };
+
+// 每個地點出現在哪幾天、哪幾個時段
+const visits = {};
+DAYS.forEach((day, di) => day.stops.forEach(s => {
+  (visits[s.p] ||= []).push({ di, s });
+}));
+
+function popupHtml(id) {
+  const p = P[id];
+  const days = [...new Set(visits[id].map(v => v.di))];
+  let h = `<div class="pop-h">${esc(p.name)}</div><div>`;
+  days.forEach(di => h += `<span class="pop-d" style="background:${DAYS[di].color}">${DAYS[di].d} ${DAYS[di].date}</span>`);
+  h += `</div>`;
+  if (p.type !== "hotel") {
+    visits[id].forEach(({ di, s }) => {
+      h += `<div class="pop-row">${s.t ? `<b>${esc(s.t)}</b> ` : ""}${esc(s.text)}`;
+      if (s.by) h += `<br><span style="color:#888">交通：${esc(s.by)}</span>`;
+      h += `</div>`;
+    });
+  }
+  if (p.note) h += `<div class="pop-row">${esc(p.note)}</div>`;
+  h += `<a class="pop-gm" href="${gmaps(p.q)}" target="_blank" rel="noopener">在 Google 地圖開啟 ↗</a>`;
+  return h;
+}
+
+// 建立圖釘：景點、餐廳依當天編號；飯店、車站共用一個
+const markers = {};   // key -> { marker, type, days:Set }
+const stopKey = {};   // `${di}-${si}` -> marker key
+
+DAYS.forEach((day, di) => {
+  let n = 0;
+  day.stops.forEach((s, si) => {
+    const p = P[s.p];
+    const shared = p.type === "hotel" || p.type === "transit";
+    const key = shared ? s.p : `${s.p}@${di}`;
+    stopKey[`${di}-${si}`] = key;
+    if (!shared) s.n = ++n;
+    if (markers[key]) { markers[key].days.add(di); return; }
+
+    let icon;
+    if (p.type === "hotel") {
+      icon = L.divIcon({ className: "", html: `<div class="pin-hotel">🏨</div>`, iconSize: [30, 30], iconAnchor: [15, 15] });
+    } else if (p.type === "transit") {
+      icon = L.divIcon({ className: "", html: `<div class="pin-transit"></div>`, iconSize: [12, 12], iconAnchor: [6, 6] });
+    } else {
+      icon = L.divIcon({ className: "", html: `<div class="pin ${p.type}${p.cand ? " cand" : ""}" style="background:${day.color}">${s.n}</div>`, iconSize: [26, 26], iconAnchor: [13, 13] });
+    }
+    const m = L.marker(p.ll, { icon, zIndexOffset: p.type === "hotel" ? 1000 : p.type === "transit" ? -1000 : 0 })
+      .bindPopup(() => popupHtml(s.p), { maxWidth: 300 })
+      .bindTooltip(p.name, { direction: "top", offset: [0, -12] });
+    markers[key] = { marker: m, type: p.type, days: new Set([di]) };
+  });
+});
+
+// 每天的路線：步行實線、搭車虛線；候選餐廳不連線
+const routes = DAYS.map(day => {
+  const g = L.layerGroup();
+  const path = day.stops.filter(s => !s.cand);
+  for (let i = 1; i < path.length; i++) {
+    const a = P[path[i - 1].p].ll, b = P[path[i].p].ll;
+    L.polyline([a, b], {
+      color: day.color, weight: 4, opacity: .85,
+      dashArray: path[i].ride ? "8 7" : null,
+    }).bindTooltip(`${day.d}：${path[i].by || ""}`, { sticky: true }).addTo(g);
+  }
+  return g;
+});
+
+// ---------- 狀態與顯示 ----------
+let current = null;  // null = 全部
+const typeOn = { sight: true, food: true, hotel: true, transit: true };
+
+function render() {
+  routes.forEach((g, di) => {
+    const show = current === null || current === di;
+    show ? g.addTo(map) : g.remove();
+  });
+  Object.values(markers).forEach(({ marker, type, days }) => {
+    const show = typeOn[type] && (current === null || days.has(current));
+    show ? marker.addTo(map) : marker.remove();
+  });
+  document.querySelectorAll("#days button").forEach(b => {
+    const di = b.dataset.i === "all" ? null : +b.dataset.i;
+    const on = di === current;
+    b.classList.toggle("on", on);
+    b.style.background = on ? (di === null ? "#333" : DAYS[di].color) : "#fff";
+  });
+  renderList();
+}
+
+function fitDay(di) {
+  const lls = (di === null ? DAYS.flatMap(d => d.stops) : DAYS[di].stops).map(s => P[s.p].ll);
+  map.fitBounds(L.latLngBounds(lls), { padding: [40, 40] });
+}
+
+function selectDay(di) {
+  current = di;
+  render();
+  fitDay(di);
+}
+
+function renderList() {
+  const list = document.getElementById("list");
+  list.innerHTML = "";
+  DAYS.forEach((day, di) => {
+    if (current !== null && current !== di) return;
+    const h = document.createElement("div");
+    h.className = "day-h";
+    h.innerHTML = `<span class="bar" style="background:${day.color}"></span><span>${day.d} ${day.date}<br><small>${esc(day.title)}</small></span>`;
+    h.onclick = () => selectDay(di);
+    list.appendChild(h);
+    if (day.note) {
+      const n = document.createElement("div");
+      n.className = "day-note";
+      n.textContent = day.note;
+      list.appendChild(n);
+    }
+    day.stops.forEach((s, si) => {
+      const p = P[s.p];
+      if (!typeOn[p.type]) return;
+      const row = document.createElement("div");
+      row.className = "stop";
+      let ic;
+      if (p.type === "hotel") ic = `<span class="ic hotel">🏨</span>`;
+      else if (p.type === "transit") ic = `<span class="ic transit"></span>`;
+      else ic = `<span class="ic${p.type === "food" ? " sq" : ""}" style="background:${day.color}">${s.n}</span>`;
+      row.innerHTML = `<span class="t">${esc(s.t || "")}</span>${ic}<span><b>${esc(p.name)}</b> — ${esc(s.text)}${s.by ? `<span class="by">↳ ${esc(s.by)}</span>` : ""}</span>`;
+      row.onclick = () => {
+        const { marker } = markers[stopKey[`${di}-${si}`]];
+        if (!map.hasLayer(marker)) marker.addTo(map);
+        map.flyTo(p.ll, Math.max(map.getZoom(), 16), { duration: .6 });
+        map.once("moveend", () => marker.openPopup());
+      };
+      list.appendChild(row);
+    });
+  });
+}
+
+// 天數按鈕
+const daysEl = document.getElementById("days");
+const allBtn = document.createElement("button");
+allBtn.dataset.i = "all";
+allBtn.textContent = "全部";
+allBtn.onclick = () => selectDay(null);
+daysEl.appendChild(allBtn);
+DAYS.forEach((day, di) => {
+  const b = document.createElement("button");
+  b.dataset.i = di;
+  b.innerHTML = `<span class="dot" style="background:${day.color}"></span>${day.d}`;
+  b.title = `${day.date} ${day.title}`;
+  b.onclick = () => selectDay(di);
+  daysEl.appendChild(b);
+});
+
+document.querySelectorAll("#filters input").forEach(cb => {
+  cb.onchange = () => { typeOn[cb.dataset.type] = cb.checked; render(); };
+});
+
+selectDay(null);
+</script>
+</body>
+</html>

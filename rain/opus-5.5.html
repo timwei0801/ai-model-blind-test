@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>D3–D4 箱根・熱海 雨天調整版</title>
+<style>
+  body { font-family: -apple-system, "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif; color: #222; max-width: 980px; margin: 24px auto; padding: 0 16px; line-height: 1.6; }
+  h1 { font-size: 1.5rem; margin-bottom: 4px; }
+  h2 { font-size: 1.2rem; margin-top: 32px; border-left: 6px solid #3b6ea5; padding-left: 10px; }
+  h2.rain { border-color: #5b6b7b; }
+  h2.sun { border-color: #e0a100; }
+  .sub { color: #666; margin-top: 0; }
+  .summary { background: #f3f7fb; border: 1px solid #cfdbe8; border-radius: 8px; padding: 12px 16px; }
+  .summary ul { margin: 6px 0; padding-left: 20px; }
+  table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 0.95rem; }
+  th, td { border: 1px solid #d5d5d5; padding: 6px 8px; vertical-align: top; }
+  th { background: #eef1f4; text-align: left; }
+  td.t { white-space: nowrap; font-variant-numeric: tabular-nums; }
+  td.w { text-align: center; font-weight: bold; font-variant-numeric: tabular-nums; }
+  td.w0 { text-align: center; color: #aaa; }
+  tr.spot td { background: #fffbea; }
+  tr.total td { background: #e8f3e8; font-weight: bold; }
+  .tag { display: inline-block; font-size: 0.75rem; padding: 0 6px; border-radius: 4px; margin-left: 4px; white-space: nowrap; }
+  .pass { background: #dbeafe; color: #1e4f8f; }
+  .paid { background: #fde2e2; color: #9b1c1c; }
+  .free { background: #e2f5e2; color: #1d6b1d; }
+  .note { color: #666; font-size: 0.88rem; }
+  .warn { background: #fff4e5; border: 1px solid #f0c48a; border-radius: 8px; padding: 10px 16px; margin-top: 12px; }
+  .calc { font-family: ui-monospace, Menlo, monospace; background: #f6f6f6; padding: 2px 6px; border-radius: 4px; }
+  ol li, ul li { margin-bottom: 6px; }
+</style>
+</head>
+<body>
+
+<h1>D3–D4 箱根・熱海 雨天調整版</h1>
+<p class="sub">D3 10/18（一）大雨：空中纜車全天停駛、海賊船上午停航 ／ D4 10/19（二）晴：交通全部正常</p>
+
+<div class="summary">
+  <b>重點</b>
+  <ul>
+    <li><b>大涌谷、海賊船 → 移到 D4 上午</b>（空中纜車只有 D4 能搭；海賊船 D4 一定有開）。</li>
+    <li><b>箱根神社 → 留在 D3</b>，改搭登山巴士往返元箱根港，不受空中纜車和海賊船停駛影響。</li>
+    <li>D3 下午改去室內的天山湯治鄉；熱海城、來宮神社移到 D4 下午，<b>熱海城排在來宮神社前面</b>（16:30 最後入場）。</li>
+    <li>原本 D3 想去的三個地方<b>全部補回來</b>，熱海城和來宮神社也都有去到。</li>
+    <li>步行總計：<b>D3 44 分</b>、<b>D4 49 分</b>，兩天都在 60 分以內，各留 16／11 分緩衝。</li>
+  </ul>
+  <span class="tag pass">周遊券</span> 周遊券可搭　<span class="tag paid">自費</span> 周遊券不能用　<span class="tag free">免費</span> 免費接駁
+</div>
+
+<h2 class="rain">D3 10/18（一）大雨｜箱根湯本・強羅・箱根神社・天山</h2>
+<table>
+  <tr><th style="width:110px">時間</th><th>行程</th><th>交通</th><th style="width:60px">步行（分）</th><th>備註</th></tr>
+  <tr><td class="t">08:30–10:00</td><td>新宿 → 箱根湯本</td><td>浪漫特快（已購）</td><td class="w0">0</td><td></td></tr>
+  <tr><td class="t">10:00–10:05</td><td>箱根湯本站 → 箱根飯店</td><td>步行</td><td class="w">5</td><td></td></tr>
+  <tr><td class="t">10:05–10:10</td><td>寄放行李</td><td>—</td><td class="w0">0</td><td>15:00 後才能入住</td></tr>
+  <tr><td class="t">10:10–10:15</td><td>箱根飯店 → 箱根湯本站</td><td>步行</td><td class="w">5</td><td></td></tr>
+  <tr><td class="t">10:15–11:00</td><td>箱根湯本 → 強羅</td><td>登山電車 45 分<span class="tag pass">周遊券</span></td><td class="w0">0</td><td></td></tr>
+  <tr><td class="t">11:00–11:02</td><td>強羅站 → 田むら銀かつ亭</td><td>步行</td><td class="w">2</td><td></td></tr>
+  <tr class="spot"><td class="t">11:02–12:15</td><td><b>午餐：田むら銀かつ亭</b>（領號碼牌）</td><td>—</td><td class="w0">0</td><td>開店後 2 分就到。排隊時間沒有資料，如果拖到比較晚，就縮短後面在天山的時間</td></tr>
+  <tr><td class="t">12:15–12:17</td><td>銀かつ亭 → 強羅站</td><td>步行</td><td class="w">2</td><td></td></tr>
+  <tr><td class="t">12:17–13:02</td><td>強羅 → 箱根湯本</td><td>登山電車 45 分<span class="tag pass">周遊券</span></td><td class="w0">0</td><td></td></tr>
+  <tr><td class="t">13:02–13:42</td><td>箱根湯本 → 元箱根港</td><td>登山巴士 40 分<span class="tag pass">周遊券</span></td><td class="w0">0</td><td>出發前先確認登山巴士有正常行駛</td></tr>
+  <tr><td class="t">13:42–13:52</td><td>元箱根港 → 箱根神社</td><td>步行</td><td class="w">10</td><td></td></tr>
+  <tr class="spot"><td class="t">13:52–14:22</td><td><b>箱根神社</b> 參拜、湖上鳥居</td><td>—</td><td class="w0">0</td><td>境內走路的時間表上沒有，沒算進去（見下方「計算前提」）</td></tr>
+  <tr><td class="t">14:22–14:32</td><td>箱根神社 → 元箱根港</td><td>步行</td><td class="w">10</td><td></td></tr>
+  <tr><td class="t">14:32–15:12</td><td>元箱根港 → 箱根湯本</td><td>登山巴士 40 分<span class="tag pass">周遊券</span></td><td class="w0">0</td><td></td></tr>
+  <tr><td class="t">15:12–15:22</td><td>箱根湯本站 → 天山湯治鄉</td><td>接駁車 10 分<span class="tag free">免費</span></td><td class="w0">0</td><td></td></tr>
+  <tr class="spot"><td class="t">15:22–17:00</td><td><b>天山湯治鄉</b>（室內溫泉）</td><td>—</td><td class="w">5</td><td>館內走路。這段可以選擇要不要去：直接回飯店的話，D3 步行是 39 分</td></tr>
+  <tr><td class="t">17:00–17:10</td><td>天山 → 箱根湯本站</td><td>接駁車 10 分<span class="tag free">免費</span></td><td class="w0">0</td><td></td></tr>
+  <tr><td class="t">17:10–17:15</td><td>箱根湯本站 → 箱根飯店，入住</td><td>步行</td><td class="w">5</td><td></td></tr>
+  <tr><td class="t">18:00–</td><td>晚餐</td><td>—</td><td class="w0">0</td><td>建議選 v5 備選裡的飯店內居酒屋「箱根路」（18:00～24:00），不用再走路</td></tr>
+  <tr class="total"><td colspan="3">D3 步行合計　<span class="calc">5+5+2+2+10+10+5+5</span></td><td class="w">44</td><td>上限 60，剩 16 分</td></tr>
+</table>
+
+<h2 class="sun">D4 10/19（二）晴｜大涌谷・海賊船 → 熱海城・來宮神社</h2>
+<table>
+  <tr><th style="width:110px">時間</th><th>行程</th><th>交通</th><th style="width:60px">步行（分）</th><th>備註</th></tr>
+  <tr><td class="t">08:30–08:35</td><td>退房 → 箱根湯本站（行李隨身）</td><td>步行</td><td class="w">5</td><td>比原本 09:30 提早 1 小時。前一天停駛，D4 纜車可能比較多人</td></tr>
+  <tr><td class="t">08:35–09:20</td><td>箱根湯本 → 強羅</td><td>登山電車 45 分<span class="tag pass">周遊券</span></td><td class="w0">0</td><td></td></tr>
+  <tr><td class="t">09:20–09:30</td><td>強羅 → 早雲山</td><td>登山纜車 10 分<span class="tag pass">周遊券</span></td><td class="w0">0</td><td></td></tr>
+  <tr><td class="t">09:30–09:45</td><td>早雲山 → 大涌谷</td><td>空中纜車 15 分<span class="tag pass">周遊券</span></td><td class="w0">0</td><td></td></tr>
+  <tr class="spot"><td class="t">09:45–10:30</td><td><b>大涌谷</b>：黑蛋店、看噴煙</td><td>—</td><td class="w">15</td><td>午餐比較晚，可以先吃黑蛋、霜淇淋墊肚子</td></tr>
+  <tr><td class="t">10:30–10:50</td><td>大涌谷 → 桃源台</td><td>空中纜車 20 分<span class="tag pass">周遊券</span></td><td class="w0">0</td><td></td></tr>
+  <tr class="spot"><td class="t">10:50–11:30</td><td><b>海賊船</b> 桃源台 → 元箱根港</td><td>海賊船 40 分<span class="tag pass">周遊券</span></td><td class="w0">0</td><td>D3 已經去過箱根神社，這天不下船走過去</td></tr>
+  <tr><td class="t">11:30–12:10</td><td>元箱根港 → 箱根湯本</td><td>登山巴士 40 分<span class="tag pass">周遊券</span></td><td class="w0">0</td><td></td></tr>
+  <tr><td class="t">12:10–12:25</td><td>箱根湯本 → 小田原</td><td>登山電車 15 分<span class="tag pass">周遊券</span></td><td class="w0">0</td><td></td></tr>
+  <tr><td class="t">12:25–12:50</td><td>小田原 → 熱海</td><td>JR 25 分<span class="tag paid">自費</span></td><td class="w0">0</td><td></td></tr>
+  <tr><td class="t">12:50–12:53</td><td>熱海站 → 熱海飯店</td><td>步行</td><td class="w">3</td><td>先寄放行李（要先跟熱海飯店確認入住前可以寄放）</td></tr>
+  <tr><td class="t">12:53–13:00</td><td>寄放行李</td><td>—</td><td class="w0">0</td><td></td></tr>
+  <tr><td class="t">13:00–13:03</td><td>熱海飯店 → 熱海站</td><td>步行</td><td class="w">3</td><td></td></tr>
+  <tr class="spot"><td class="t">13:03–14:00</td><td><b>午餐：五味八珍</b>（熱海站大樓）</td><td>—</td><td class="w0">0</td><td>11:00～21:00</td></tr>
+  <tr><td class="t">14:00–14:30</td><td>熱海站 → 熱海城</td><td>巴士＋纜車 25 分<span class="tag paid">自費</span>，下車步行 5 分</td><td class="w">5</td><td><b>最晚 16:00 要從熱海站出發</b>，才趕得上 16:30 最後入場</td></tr>
+  <tr class="spot"><td class="t">14:30–15:20</td><td><b>熱海城</b></td><td>—</td><td class="w0">0</td><td>9:00～17:00，最後入場 16:30</td></tr>
+  <tr><td class="t">15:20–15:50</td><td>熱海城 → 熱海站</td><td>步行 5 分＋纜車＋巴士 25 分<span class="tag paid">自費</span></td><td class="w">5</td><td></td></tr>
+  <tr><td class="t">15:50–16:00</td><td>熱海 → 來宮 → 來宮神社</td><td>JR 5 分<span class="tag paid">自費</span>，下車步行 5 分</td><td class="w">5</td><td></td></tr>
+  <tr class="spot"><td class="t">16:00–16:40</td><td><b>來宮神社</b></td><td>—</td><td class="w0">0</td><td></td></tr>
+  <tr><td class="t">16:40–16:50</td><td>來宮神社 → 來宮 → 熱海</td><td>步行 5 分＋JR 5 分<span class="tag paid">自費</span></td><td class="w">5</td><td></td></tr>
+  <tr><td class="t">16:50–16:53</td><td>熱海站 → 熱海飯店，入住</td><td>步行</td><td class="w">3</td><td>比 18:00 晚餐早 67 分到</td></tr>
+  <tr><td class="t">18:00–</td><td>晚餐（一泊二食）</td><td>—</td><td class="w0">0</td><td></td></tr>
+  <tr class="total"><td colspan="3">D4 步行合計　<span class="calc">5+15+3+3+5+5+5+5+3</span></td><td class="w">49</td><td>上限 60，剩 11 分</td></tr>
+</table>
+
+<h2>改了什麼、為什麼</h2>
+<ol>
+  <li><b>大涌谷移到 D4。</b>要到大涌谷只能搭空中纜車，D3 全天停駛，所以只能排在 D4。</li>
+  <li><b>海賊船移到 D4。</b>D3 要 14:00 以後才「可能」恢復，如果把行程押在這上面，沒開就整段落空。D4 一定有開，而且是晴天，從湖上看得到風景；大雨天就算有開，湖上也看不到什麼。所以 <b>D3 就算 14:00 後恢復也不用改行程</b>。</li>
+  <li><b>箱根神社留在 D3，改成搭巴士往返。</b>這是步行時間逼出來的結果。如果三個點全部塞進 D4：
+    <span class="calc">5 飯店 + 15 大涌谷 + 20 神社往返 + 10 熱海城 + 10 來宮 + 3 熱海飯店 = 63 分</span>，就算行李全程自己帶，也已經超過 60 分。熱海城和來宮神社一定要去，大涌谷又只能排 D4，可以移出去的就只剩箱根神社。從湯本搭登山巴士到元箱根港，不需要空中纜車，也不需要海賊船，雨天照樣去得到。</li>
+  <li><b>D3 雨天行程：保留銀かつ亭，加天山湯治鄉，不排 POLA 美術館。</b>銀かつ亭是原本就安排好的午餐，11:00 開店就到。我有試算 POLA 版（銀かつ亭 → POLA → 箱根神社）：
+    <span class="calc">5+5+2+2+20+10+10+5 = 59 分</span>，帳面上沒有超過，但只剩 1 分。而且 D3 早上在東京從東京飯店 走到馬喰横山、在新宿轉浪漫特快的步行，表上沒有時間、沒有算進去，實際走下來一定會超過 60。所以改排室內溫泉的天山（館內只走 5 分），淋完雨正好去泡湯。雕刻之森大部分是戶外展區，大雨不適合。</li>
+  <li><b>熱海改到 D4 下午，熱海城排在來宮神社前面。</b>熱海城 16:30 最後入場，時間比較死，所以先去；來宮神社沒有給關門時間，排後面。五味八珍午餐從 11:00 改成約 13:00。</li>
+  <li><b>D4 提早到 08:30 出發</b>（原本 09:30），預留給纜車排隊和取號碼的時間。照這張表走，16:53 就會到熱海飯店。</li>
+  <li><b>D4 熱海的行李改成先放在熱海飯店</b>（原本是放熱海站），因為「站 ⇄ 熱海飯店 3 分」是表上有的時間，可以算進步行總數。v5 原本寫大行李放在東京東京飯店，所以 D4 箱根這段只需要帶隨身的過夜行李。</li>
+  <li><b>周遊券使用：</b>D3 的登山電車、登山巴士都用周遊券；D4 從登山電車、登山纜車、空中纜車、海賊船、登山巴士到小田原的登山電車也都可以用。周遊券不能用的只有 JR（小田原→熱海、熱海⇄來宮）和熱海城的巴士＋纜車，這部分和 v5 原本的預算一樣。</li>
+</ol>
+
+<div class="warn">
+  <b>當天的備案</b>
+  <ul>
+    <li><b>D3 銀かつ亭排很久：</b>後面的箱根神社沒有關門時間，天山開到 23:00，整段往後延就好，不會影響其他行程。可以縮短泡湯時間，或乾脆不去天山（步行降到 39 分）。</li>
+    <li><b>D4 行李太重、不想帶上山：</b>可以退房時請箱根飯店寄放（要先確認），12:10 回到湯本後走回飯店拿，步行 +10 分，D4 變成 <b>59 分</b>，時間大約往後延 20 分，17:13 左右到熱海飯店，還是來得及。不過這樣只剩 1 分緩衝，所以排成備案。</li>
+    <li><b>D4 前段延誤：</b>熱海城的關鍵時間是「16:00 前從熱海站出發」。如果快來不及，就把五味八珍午餐縮短或改成外帶，先去熱海城。</li>
+  </ul>
+</div>
+
+<h2>計算前提</h2>
+<ul class="note">
+  <li>交通時間都是用你給的數字。表上只給單一方向的路段（強羅 → 湯本、湯本 → 元箱根港、熱海城 → 熱海站、來宮 → 熱海），反方向我用<b>同樣的時間</b>計算。</li>
+  <li>強羅、早雲山、大涌谷、桃源台、小田原轉乘時的站內步行，表上沒有給，算 0。</li>
+  <li>箱根神社境內、熱海城館內、來宮神社境內的走路，表上也沒有給，所以沒算；兩天各留下的 16／11 分緩衝主要就是留給這些。D3 早上在東京的步行同樣沒算。</li>
+  <li>停留時間是我安排的，不是表上的數字：銀かつ亭 73 分、箱根神社 30 分、天山 98 分、大涌谷 45 分、五味八珍 57 分、熱海城 50 分、來宮神社 40 分。</li>
+  <li>箱根飯店寄放行李（D3 10:00）是你提供的；熱海飯店入住前可不可以寄放行李，請先跟飯店確認。</li>
+</ul>
+
+</body>
+</html>

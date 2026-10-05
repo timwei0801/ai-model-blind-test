@@ -27,6 +27,12 @@
   ul { padding-left:20px; font-size:14px; color:var(--gray); }
   li { margin-bottom:6px; }
   footer { margin-top:28px; font-weight:900; }
+  .sec { font-size:24px; font-weight:900; line-height:1.35; margin:40px 0 8px; }
+  .task-h { font-size:18px; font-weight:900; margin:26px 0 8px; }
+  .row3 { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin:10px 0 4px; }
+  .card.sm { padding:14px 6px; }
+  .card.sm b { font-size:18px; color:#fff; }
+  .card.sm span { font-size:13px; }
 </style>
 </head>
 <body>
@@ -44,6 +50,17 @@
   </div>
   <a class="card extra" href="E.html"><b>E</b><span>加碼：不在投票裡，揭曉時一起講</span></a>
   <div class="vote">看完到 Threads <a href="https://www.threads.com/@timwei.ai">@timwei.ai</a> 投票，答案會在那裡揭曉</div>
+  <h2 class="sec" id="tasks">另外 3 題：健檢、地圖、雨天備案</h2>
+  <p>盲測之後，我又給 Sonnet 5.5、Opus 5.5、Fable 5.1 出了 3 題，用的是同一份行程。結果已經公布了，所以這裡直接標模型名稱。</p>
+  <p class="task-h">第 1 題：出發前幫行程做健檢</p>
+  <div class="prompt"><small>它們收到的指令</small>出發前幫我檢查這份東京行程，把可能會出包的地方全部找出來，依嚴重程度用紅黃綠燈整理成一頁 HTML 報告。</div>
+  <div class="row3"><a class="card sm" href="check/sonnet-5.5.html"><b>Sonnet 5.5</b><span>點我看</span></a><a class="card sm" href="check/opus-5.5.html"><b>Opus 5.5</b><span>點我看</span></a><a class="card sm" href="check/fable-5.1.html"><b>Fable 5.1</b><span>點我看</span></a></div>
+  <p class="task-h">第 2 題：做成行程地圖</p>
+  <div class="prompt"><small>它們收到的指令</small>幫我把這份東京行程做成一張互動地圖：每個景點、餐廳、飯店都放圖釘，每天的路線用不同顏色連起來，做成一頁 HTML。</div>
+  <div class="row3"><a class="card sm" href="map/sonnet-5.5.html"><b>Sonnet 5.5</b><span>點我看</span></a><a class="card sm" href="map/opus-5.5.html"><b>Opus 5.5</b><span>點我看</span></a><a class="card sm" href="map/fable-5.1.html"><b>Fable 5.1</b><span>點我看</span></a></div>
+  <p class="task-h">第 3 題：箱根下大雨，重排兩天行程</p>
+  <div class="prompt"><small>指令重點（完整指令很長）</small>D3 箱根下大雨、空中纜車全天停駛，D4 是晴天。重排 D3 和 D4，把大涌谷、海賊船、箱根神社盡量補回來；車票和飯店都不能改，熱海城和來宮神社一定要去，同行的長輩每天步行不能超過 60 分鐘。</div>
+  <div class="row3"><a class="card sm" href="rain/sonnet-5.5.html"><b>Sonnet 5.5</b><span>點我看</span></a><a class="card sm" href="rain/opus-5.5.html"><b>Opus 5.5</b><span>點我看</span></a><a class="card sm" href="rain/fable-5.1.html"><b>Fable 5.1</b><span>點我看</span></a></div>
   <div class="prompt"><small>關於這個測試</small>這是我自己好奇做的測試，沒有業配，也不是正式的跑分，每個模型各跑一次。條件都固定：同一份 Excel、同一句指令、同一個版本、effort 都設成 high（Haiku 不支援，用它的預設），每個都從一個空的資料夾開始做。</div>
   <ul>
     <li>網頁是 AI 做的，我沒有改內容，只做了兩件事：有拍到手的照片模糊處理、飯店名稱換成「東京飯店」這類代稱。</li>

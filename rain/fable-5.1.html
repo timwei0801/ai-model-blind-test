@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>箱根 D3／D4 雨天改版行程</title>
+<style>
+  body { font-family: -apple-system, "PingFang TC", "Noto Sans TC", sans-serif; max-width: 960px; margin: 24px auto; padding: 0 16px; color: #222; line-height: 1.55; }
+  h1 { font-size: 1.6em; margin-bottom: 4px; }
+  h2 { font-size: 1.25em; border-left: 5px solid #2a6f97; padding-left: 10px; margin-top: 36px; }
+  .sub { color: #666; margin-top: 0; }
+  table { border-collapse: collapse; width: 100%; margin: 12px 0; font-size: 0.95em; }
+  th, td { border: 1px solid #ccd; padding: 7px 9px; vertical-align: top; }
+  th { background: #eef3f8; text-align: left; }
+  td.num { text-align: right; white-space: nowrap; }
+  tr.total td { background: #fff7e0; font-weight: bold; }
+  .ok { color: #1a7f37; font-weight: bold; }
+  .box { background: #f6f8fa; border: 1px solid #d0d7de; border-radius: 6px; padding: 12px 16px; margin: 12px 0; }
+  .warn { background: #fff4e5; border-color: #f0b35c; }
+  ul { margin: 6px 0; padding-left: 22px; }
+  li { margin: 4px 0; }
+  .tag { display: inline-block; font-size: 0.8em; padding: 1px 6px; border-radius: 4px; background: #dfe9f3; color: #2a6f97; margin-left: 4px; }
+</style>
+</head>
+<body>
+
+<h1>箱根 D3／D4 雨天改版行程</h1>
+<p class="sub">D3 大雨（空中纜車全天停駛、海賊船上午停航）／D4 晴天（全部正常）。五人同行，長輩每天步行上限 60 分。</p>
+
+<div class="box">
+  <strong>改動一覽</strong>
+  <ul>
+    <li><strong>大涌谷、海賊船 → 移到 D4 早上。</strong>這兩項在 D3 根本無法成行（纜車停駛、船上午停航），D4 晴天一次補回，也不用賭 14:00 之後船會不會復航。</li>
+    <li><strong>箱根神社 → 留在 D3 下午，改搭登山巴士去。</strong>神社本身沒有關閉，只是原本要靠船到元箱根。D3 從湯本搭巴士到元箱根港（周遊券可用）就能到，不受纜車、船停駛影響。</li>
+    <li><strong>D3 中午加田むら銀かつ亭、晚上加天山湯治鄉</strong>，都是室內，填補雨天的空檔。POLA 美術館不排，因為步行會超過 60 分。</li>
+    <li><strong>D4 下午照原計畫去熱海</strong>：先熱海城（趕 16:30 最後入場），再來宮神社，17:00 前到熱海飯店。</li>
+  </ul>
+</div>
+
+<div class="box warn">
+  <strong>為什麼不把三樣都放 D4？</strong><br>
+  D4 若同時走大涌谷（15）＋箱根神社（20）＋熱海城（5＋5）＋來宮神社（5＋5）＋早上出門（5）＋到熱海飯店（3），長輩步行會是 <strong>63 分</strong>，超過 60 分上限，行李還沒算進去。
+  三樣裡只有神社在 D3 有辦法去，所以把它留在 D3，D4 專心補大涌谷和海賊船。
+</div>
+
+<h2>D3　大雨｜新宿 → 箱根湯本 → 強羅（午餐）→ 箱根神社 → 箱根飯店</h2>
+<table>
+  <thead><tr><th style="width:11em">時間</th><th>行程</th><th style="width:16em">交通</th><th style="width:5em">步行</th></tr></thead>
+  <tbody>
+    <tr><td>08:30 → 10:00</td><td>新宿 → 箱根湯本（已購票，不可改）</td><td>浪漫特快 90 分</td><td class="num">0</td></tr>
+    <tr><td>10:00 → 10:05</td><td>箱根湯本站 → 箱根飯店，先寄放行李</td><td>步行</td><td class="num">5</td></tr>
+    <tr><td>10:05 → 10:10</td><td>箱根飯店 → 箱根湯本站</td><td>步行</td><td class="num">5</td></tr>
+    <tr><td>10:15 → 11:00</td><td>箱根湯本 → 強羅</td><td>登山電車 45 分<span class="tag">周遊券</span></td><td class="num">0</td></tr>
+    <tr><td>11:00 → 11:02</td><td>強羅站 → 田むら銀かつ亭，11:00 開店，到場先抽號碼牌</td><td>步行</td><td class="num">2</td></tr>
+    <tr><td>11:02 → 12:15</td><td>午餐：田むら銀かつ亭（含等候時間）</td><td>—</td><td class="num">0</td></tr>
+    <tr><td>12:15 → 12:17</td><td>田むら銀かつ亭 → 強羅站</td><td>步行</td><td class="num">2</td></tr>
+    <tr><td>12:20 → 13:05</td><td>強羅 → 箱根湯本</td><td>登山電車 45 分<span class="tag">周遊券</span></td><td class="num">0</td></tr>
+    <tr><td>13:10 → 13:50</td><td>箱根湯本 → 元箱根港</td><td>登山巴士 40 分<span class="tag">周遊券</span></td><td class="num">0</td></tr>
+    <tr><td>13:50 → 14:00</td><td>元箱根港 → 箱根神社（雨天石階滑，慢慢走）</td><td>步行</td><td class="num">10</td></tr>
+    <tr><td>14:00 → 14:30</td><td>箱根神社參拜</td><td>—</td><td class="num">0</td></tr>
+    <tr><td>14:30 → 14:40</td><td>箱根神社 → 元箱根港</td><td>步行</td><td class="num">10</td></tr>
+    <tr><td>14:50 → 15:30</td><td>元箱根港 → 箱根湯本</td><td>登山巴士 40 分<span class="tag">周遊券</span></td><td class="num">0</td></tr>
+    <tr><td>15:30 → 15:35</td><td>箱根湯本站 → 箱根飯店，辦入住（15:00 後可入住）、休息</td><td>步行</td><td class="num">5</td></tr>
+    <tr><td>16:30 → 16:35</td><td>箱根飯店 → 箱根湯本站（可省略，見下方）</td><td>步行</td><td class="num">5</td></tr>
+    <tr><td>16:35 → 16:45</td><td>箱根湯本站 → 天山湯治鄉</td><td>免費接駁車 10 分</td><td class="num">0</td></tr>
+    <tr><td>16:45 → 19:00</td><td>天山湯治鄉 泡湯（室內，館內走路 5 分）；晚餐在天山或回箱根飯店自理</td><td>—</td><td class="num">5</td></tr>
+    <tr><td>19:00 → 19:10</td><td>天山湯治鄉 → 箱根湯本站</td><td>免費接駁車 10 分</td><td class="num">0</td></tr>
+    <tr><td>19:10 → 19:15</td><td>箱根湯本站 → 箱根飯店</td><td>步行</td><td class="num">5</td></tr>
+    <tr class="total"><td colspan="3">D3 步行合計</td><td class="num">54 分 <span class="ok">✔</span></td></tr>
+  </tbody>
+</table>
+<ul>
+  <li>天山湯治鄉這段共 15 分步行，長輩若已經累了可以整段省掉，D3 變成 <strong>39 分</strong>。</li>
+  <li>13:10 從湯本到元箱根港的巴士，資料只給了反方向（元箱根港 → 湯本 40 分），這裡用同樣的 40 分計算。</li>
+  <li>神社參拜 30 分之內的走動，資料沒有給，沒有另外加進步行分鐘。</li>
+</ul>
+
+<h2>D4　晴天｜湯本 → 強羅 → 早雲山 → 大涌谷 → 桃源台 → 海賊船 → 元箱根 → 湯本 → 熱海</h2>
+<table>
+  <thead><tr><th style="width:11em">時間</th><th>行程</th><th style="width:16em">交通</th><th style="width:5em">步行</th></tr></thead>
+  <tbody>
+    <tr><td>08:00 → 08:05</td><td>箱根飯店退房，行李先寄放在飯店 → 箱根湯本站</td><td>步行</td><td class="num">5</td></tr>
+    <tr><td>08:10 → 08:55</td><td>箱根湯本 → 強羅</td><td>登山電車 45 分<span class="tag">周遊券</span></td><td class="num">0</td></tr>
+    <tr><td>09:00 → 09:10</td><td>強羅 → 早雲山</td><td>登山纜車 10 分<span class="tag">周遊券</span></td><td class="num">0</td></tr>
+    <tr><td>09:15 → 09:30</td><td>早雲山 → 大涌谷</td><td>空中纜車 15 分<span class="tag">周遊券</span></td><td class="num">0</td></tr>
+    <tr><td>09:30 → 10:00</td><td>大涌谷：黑蛋店、看噴煙</td><td>—</td><td class="num">15</td></tr>
+    <tr><td>10:05 → 10:25</td><td>大涌谷 → 桃源台</td><td>空中纜車 20 分<span class="tag">周遊券</span></td><td class="num">0</td></tr>
+    <tr><td>10:30 → 11:10</td><td>桃源台 → 元箱根港</td><td>海賊船 40 分<span class="tag">周遊券</span></td><td class="num">0</td></tr>
+    <tr><td>11:20 → 12:00</td><td>元箱根港 → 箱根湯本（神社 D3 已去過，直接轉車）</td><td>登山巴士 40 分<span class="tag">周遊券</span></td><td class="num">0</td></tr>
+    <tr><td>12:00 → 12:05</td><td>箱根湯本站 → 箱根飯店，取行李</td><td>步行</td><td class="num">5</td></tr>
+    <tr><td>12:05 → 12:10</td><td>箱根飯店 → 箱根湯本站</td><td>步行</td><td class="num">5</td></tr>
+    <tr><td>12:15 → 12:30</td><td>箱根湯本 → 小田原</td><td>登山電車 15 分<span class="tag">周遊券</span></td><td class="num">0</td></tr>
+    <tr><td>12:40 → 13:05</td><td>小田原 → 熱海</td><td>JR 25 分（周遊券不可用，另購票）</td><td class="num">0</td></tr>
+    <tr><td>13:05 → 13:55</td><td>午餐：熱海站大樓 五味八珍（站內，步行不計）</td><td>—</td><td class="num">0</td></tr>
+    <tr><td>14:00 → 14:25</td><td>熱海站 → 熱海城</td><td>巴士＋纜車 25 分</td><td class="num">0</td></tr>
+    <tr><td>14:25 → 14:30</td><td>下車 → 熱海城入口（最後入場 16:30，餘裕 2 小時）</td><td>步行</td><td class="num">5</td></tr>
+    <tr><td>14:30 → 15:25</td><td>熱海城參觀</td><td>—</td><td class="num">0</td></tr>
+    <tr><td>15:25 → 15:30</td><td>熱海城 → 纜車站</td><td>步行</td><td class="num">5</td></tr>
+    <tr><td>15:30 → 15:55</td><td>熱海城 → 熱海站</td><td>纜車＋巴士 25 分</td><td class="num">0</td></tr>
+    <tr><td>16:00 → 16:05</td><td>熱海站 → 來宮站</td><td>JR 5 分</td><td class="num">0</td></tr>
+    <tr><td>16:05 → 16:10</td><td>來宮站 → 來宮神社</td><td>步行</td><td class="num">5</td></tr>
+    <tr><td>16:10 → 16:40</td><td>來宮神社參拜</td><td>—</td><td class="num">0</td></tr>
+    <tr><td>16:40 → 16:45</td><td>來宮神社 → 來宮站</td><td>步行</td><td class="num">5</td></tr>
+    <tr><td>16:50 → 16:55</td><td>來宮站 → 熱海站</td><td>JR 5 分</td><td class="num">0</td></tr>
+    <tr><td>16:55 → 16:58</td><td>熱海站 → 熱海飯店，辦入住（18:00 晚餐前有 1 小時餘裕）</td><td>步行</td><td class="num">3</td></tr>
+    <tr class="total"><td colspan="3">D4 步行合計</td><td class="num">53 分 <span class="ok">✔</span></td></tr>
+  </tbody>
+</table>
+<ul>
+  <li>熱海城與來宮神社的「下車後步行 5 分」資料只給單程，表裡來回各算 5 分（共 20 分），比較保險。</li>
+  <li>熱海城 → 熱海站的回程、來宮站 → 熱海站的回程，資料只給去程，這裡用同樣的 25 分、5 分計算。</li>
+  <li>熱海城館內、來宮神社境內的走動時間資料沒有給，沒有加進步行分鐘；D4 還有 7 分餘裕。</li>
+  <li>行李：排的是早上寄在箱根飯店、12:00 經過湯本時取回（來回 10 分）。若行李隨身帶走或寄湯本站置物櫃，D4 步行降為 43 分，但長輩以外的四人要全程帶行李上纜車、搭船。</li>
+  <li>熱海城先去、來宮神社後去的原因：熱海城有 16:30 最後入場的硬限制，上午箱根任何一段延誤都不會影響到它。</li>
+</ul>
+
+<h2>備案</h2>
+<ul>
+  <li><strong>D3 13:00 雨勢太大，不想去神社：</strong>13:10 不搭巴士，直接回箱根飯店寄放行李後去天山湯治鄉，D3 步行 39 分。神社改到 D4 11:10 下船後走過去（來回 20 分），D4 會變成 <strong>63 分</strong>，超過 3 分；若要守住 60 分，可以把行李改為隨身帶（省 10 分），D4 變 53 分。</li>
+  <li><strong>D4 上午箱根段延誤：</strong>只要 15:30 前到熱海站就來得及熱海城最後入場（15:30 出發 → 15:55 到 → 16:00 入場）。真的來不及就先去來宮神社、熱海城改隔天上午，但這要看 D5 安排。</li>
+</ul>
+
+</body>
+</html>

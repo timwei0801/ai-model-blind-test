@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>東京 9 天行程｜出發前檢查報告</title>
+<style>
+  :root {
+    --red: #d93025; --red-bg: #fdecea;
+    --yellow: #e8a400; --yellow-bg: #fff6dc;
+    --green: #1e8e3e; --green-bg: #e8f5ec;
+    --ink: #202124; --muted: #5f6368; --line: #dadce0;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 28px 20px 48px; color: var(--ink); background: #f6f7f9;
+    font: 14px/1.65 -apple-system, "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+  }
+  .page { max-width: 1080px; margin: 0 auto; }
+  h1 { font-size: 22px; margin: 0 0 4px; }
+  .sub { color: var(--muted); font-size: 13px; margin-bottom: 18px; }
+
+  .counts { display: flex; gap: 12px; margin-bottom: 14px; }
+  .count { flex: 1; display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-radius: 10px; background: #fff; border: 1px solid var(--line); }
+  .dot { width: 22px; height: 22px; border-radius: 50%; flex: none; }
+  .count b { font-size: 24px; line-height: 1; }
+  .count span { color: var(--muted); font-size: 13px; }
+  .d-red { background: var(--red); } .d-yellow { background: var(--yellow); } .d-green { background: var(--green); }
+
+  .first { background: #fff; border: 1px solid var(--line); border-left: 5px solid var(--red); border-radius: 8px; padding: 12px 16px; margin-bottom: 22px; }
+  .first b { color: var(--red); }
+  .first ol { margin: 6px 0 0; padding-left: 20px; }
+
+  h2 { display: flex; align-items: center; gap: 10px; font-size: 17px; margin: 26px 0 10px; }
+  h2 small { font-weight: 400; color: var(--muted); font-size: 13px; }
+
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .grid.one { grid-template-columns: 1fr; }
+  .item { background: #fff; border: 1px solid var(--line); border-left-width: 5px; border-radius: 8px; padding: 12px 14px; }
+  .red .item { border-left-color: var(--red); }
+  .yellow .item { border-left-color: var(--yellow); }
+  .green .item { border-left-color: var(--green); }
+  .item h3 { margin: 0 0 2px; font-size: 14.5px; }
+  .tag { display: inline-block; min-width: 28px; text-align: center; padding: 0 6px; margin-right: 6px; border-radius: 4px; color: #fff; font-size: 12px; font-weight: 700; }
+  .red .tag { background: var(--red); } .yellow .tag { background: var(--yellow); } .green .tag { background: var(--green); }
+  .where { color: var(--muted); font-size: 12px; margin-bottom: 4px; }
+  .item p { margin: 4px 0; }
+  .item ul { margin: 4px 0; padding-left: 18px; }
+  .fix { margin-top: 6px; padding: 5px 9px; border-radius: 5px; font-size: 13px; }
+  .red .fix { background: var(--red-bg); } .yellow .fix { background: var(--yellow-bg); } .green .fix { background: var(--green-bg); }
+  .fix::before { content: "建議　"; font-weight: 700; }
+
+  .ok { background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 12px 18px; }
+  .ok ul { margin: 0; padding-left: 18px; columns: 2; column-gap: 28px; }
+  .ok li { break-inside: avoid; margin-bottom: 3px; }
+
+  footer { margin-top: 22px; color: var(--muted); font-size: 12px; }
+
+  @media (max-width: 760px) { .grid, .counts { grid-template-columns: 1fr; flex-direction: column; } .ok ul { columns: 1; } }
+  @media print { body { background: #fff; padding: 0; font-size: 11px; } .item, .count { break-inside: avoid; } }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <h1>東京 9 天行程｜出發前檢查報告</h1>
+  <div class="sub">檢查檔案：東京9天行程_v5.xlsx（5 位大人，10/16～10/24）　·　檢查日：2026-10-03　·　共 14 個分頁逐格檢查，含公式與備註</div>
+
+  <div class="counts">
+    <div class="count"><div class="dot d-red"></div><div><b>4</b><br><span>紅燈：會直接出事，先處理</span></div></div>
+    <div class="count"><div class="dot d-yellow"></div><div><b>13</b><br><span>黃燈：很可能卡關或超支</span></div></div>
+    <div class="count"><div class="dot d-green"></div><div><b>5</b><br><span>綠燈：小瑕疵，有空再修</span></div></div>
+  </div>
+
+  <div class="first">
+    <b>先做這三件事：</b>
+    <ol>
+      <li>確認出發年份（R1）。檔案沒寫年份，而星期標示和 2026 年對不上。</li>
+      <li>確認預訂清單每一項到底訂了沒（R2）。目前 17 項全部沒勾。</li>
+      <li>重排 D5 下午的時間線（R3）。目前寫的時間不可能趕得上。</li>
+    </ol>
+  </div>
+
+  <!-- ===================== 紅燈 ===================== -->
+  <section class="red">
+    <h2><span class="dot d-red"></span>紅燈 <small>不處理會直接影響出發或當天行程</small></h2>
+    <div class="grid one">
+
+      <div class="item">
+        <h3><span class="tag">R1</span>年份與星期對不上</h3>
+        <div class="where">位置：所有分頁名稱、總覽 B10:B18</div>
+        <p>檔案沒寫年份。10/16～10/24 標成「六日一二三四五六日」，這是 <b>2027 年</b>的星期；<b>2026 年 10/16 是週五</b>（今天是 2026-10-03）。住宿表裡東京飯店 週六價高、週日價低的規律（住宿!E6:E15），也比較像 2027 年。這一點是我的推論，不是檔案寫明的。</p>
+        <p>如果實際是 2026 年出發，每一天的星期都差一天：D2 是週六、D3 箱根是週日（最擠）、D9 是週六。「週日可能排隊」「週六午餐菜單」「週二公休」這些判斷都要重看。</p>
+        <div class="fix">先確認年份。若是 2026，改掉所有星期標示，並重核各店公休日與假日價。若是 2027，匯率（2026/6 的參考值）和各項票價也要在出發前重查。</div>
+      </div>
+
+      <div class="item">
+        <h3><span class="tag">R2</span>預訂清單 17 項全部沒勾，多數預訂窗口可能已過</h3>
+        <div class="where">位置：預訂清單 C4:C18</div>
+        <p>如果 10/16 是 2026 年，距出發只剩 13 天。標「一個月前」的澀谷 SKY 夕陽場、浪漫特快、箱根周遊券、東武特急、利久、敘敘苑，和標「二個月前」的人形町今半，都已經過了建議時間。<b>澀谷 SKY 夕陽場、浪漫特快、東武特急（楓葉季）</b>最可能已經賣完。D2、D3、D6、D8 的主軸都靠這些。</p>
+        <p>如果是 2027 年就不急，但清單缺「最晚訂位日」，建議現在補上並設提醒。</p>
+        <div class="fix">今天逐項標「已訂／未訂」。沒訂的依賣完風險由高到低補訂：SKY → 浪漫特快 → 東武特急 → 今半 → 敘敘苑 → 利久，並先想好訂不到的備案。</div>
+      </div>
+
+      <div class="item">
+        <h3><span class="tag">R3</span>D5 時間線自相矛盾，午餐不可能 14:00 吃到</h3>
+        <div class="where">位置：D5 A11:C14、三餐總覽 C17</div>
+        <p>表上的順序是「11:30 離開熱海」→「13:30 品川→馬喰町放行李」→「14:30 前往上野」→「14:00 午餐」，時間是倒退的。三餐總覽又寫「13:30 左右到」，同一餐有三個時間。</p>
+        <p>熱海到品川搭東海道線約 1.5～2 小時，所以 13:30 前後才到品川。再繞去馬喰町放行李、轉車到上野，大約 15:00 後才會到，已經碰到午餐時段尾巴（工作表寫其他分店約 11:30～16:00）。另外 A12:A14 的時間被存成日期（2026-09-21），A11 沒有時間。</p>
+        <div class="fix">東海道線有直通上野的班次（上野東京線，請查實際班次）。可以不回飯店，直接到上野吃飯，行李放上野車站寄物櫃或帶著走。也可以提早一班離開熱海。訂位時間以重排後的為準。</div>
+      </div>
+
+      <div class="item">
+        <h3><span class="tag">R4</span>住宿資料不一致、尚未確認</h3>
+        <div class="where">位置：住宿!A8:L11、預訂清單 A5:A6</div>
+        <ul>
+          <li><b>D3 夜</b>：住宿表標「箱根飯店（待確認）」，備註寫「確認是否為箱根飯店、是否含早餐」。也就是訂了哪一家還沒確定。</li>
+          <li><b>D4 夜</b>：行程和住宿表是「熱海飯店」，預訂清單寫「熱海<b>新赤尾</b>」，名稱對不上。</li>
+          <li>預訂清單兩家都寫「用在 D3、D4」，但湯本是 D3 夜、熱海是 D4 夜。</li>
+          <li>兩家的雙人房價格都借用四人房價格。熱海飯店「一泊二食」的價格是每人還是每房也沒確認，預算裡的 NT$51,640 可信度低。</li>
+        </ul>
+        <div class="fix">打開訂房確認信，核對店名、日期、房型、入住人數、含餐、取消規則，再把行程、住宿表、預訂清單三處改成同一個名稱。</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 黃燈 ===================== -->
+  <section class="yellow">
+    <h2><span class="dot d-yellow"></span>黃燈 <small>有明顯風險，建議出發前處理或備案</small></h2>
+    <div class="grid">
+
+      <div class="item">
+        <h3><span class="tag">Y1</span>大行李寄放沒有確認</h3>
+        <div class="where">位置：D3 R6、D4 R7／R23、D5 R7／R20</div>
+        <p>東京飯店 10/18 退房、10/20 才回來。D3 備註建議寄放東京飯店 兩晚，但沒有任何飯店同意的紀錄（這種長時間寄放不一定接受）。熱海 D4 10:30、D5 09:30 都靠車站寄物櫃，5 人只算 2 個大櫃，容量沒驗證。</p>
+        <div class="fix">這週先 email 或打電話問東京飯店 和熱海飯店。不行的話改用飯店對飯店的行李配送，或只帶小行李上箱根。</div>
+      </div>
+
+      <div class="item">
+        <h3><span class="tag">Y2</span>D3 午餐排隊會拖垮後面所有接駁</h3>
+        <div class="where">位置：D3 R10～R15</div>
+        <p>11:05 到田むら本店、12:10 要搭登山纜車，但表上自己寫要現場領號碼牌、排 30 分到 1 小時以上。後面是空中纜車→海賊船→15:00 箱根神社→16:15 巴士，環環相扣。空中纜車遇火山氣體或強風會停駛，備案只寫了午餐，沒有纜車停駛的替代路線。</p>
+        <div class="fix">設一個停損點：11:35 還沒叫到號就改去舊店或大涌谷吃。出發前查纜車營運狀況，備好替代路線。</div>
+      </div>
+
+      <div class="item">
+        <h3><span class="tag">Y3</span>D3 早上換票與轉乘偏緊</h3>
+        <div class="where">位置：D3 R6～R9</div>
+        <p>07:40 出門、08:30 新宿發車，若周遊券是需要換票的憑證，換票地點和 5 人的排隊時間沒算進去。10:00 到湯本、10:20 就要搭登山電車，中間還要到箱根飯店放行李再回站，備註寫步行 3 分鐘，請用地圖實測。</p>
+        <div class="fix">確認換票地點與營業時間，或選能直接掃 QR code 的版本。放行李來回超過 10 分鐘就搭下一班。</div>
+      </div>
+
+      <div class="item">
+        <h3><span class="tag">Y4</span>D6 日光：下山到午餐幾乎沒有緩衝</h3>
+        <div class="where">位置：D6 R8～R12</div>
+        <p>12:15 從中禪寺下山、13:00 就要到恵比寿家（有預約），下山巴士約 40～50 分，等於零緩衝，而上山那列自己也註記楓葉季會塞車。另外，東照宮「最後入場 16:30」我印象中 4～10 月是 16:00，請以官網為準。</p>
+        <div class="fix">提早一班下山，或把午餐預約改到 13:30（最後點餐是 14:30，有空間）。東照宮最後入場時間請查官網。</div>
+      </div>
+
+      <div class="item">
+        <h3><span class="tag">Y5</span>敘敘苑：店名、時段、預約規則不一致</h3>
+        <div class="where">位置：D5 R14、三餐總覽 C17、預訂清單 A12</div>
+        <p>行程和預訂清單寫「上野丸井店」，三餐總覽和圖片區寫「上野廣小路店」。三餐總覽說「部分分店午餐不接受預約」，預訂清單卻列了「5 人預約」，午餐時段也沒確認。</p>
+        <div class="fix">以訂位確認信為準統一店名。打電話確認午餐是否接受 5 人預約，以及最晚入店時間。</div>
+      </div>
+
+      <div class="item">
+        <h3><span class="tag">Y6</span>D2 全天靠排隊，加上定時段門票</h3>
+        <div class="where">位置：D2 R8～R11</div>
+        <p>BASO 要現場排隊（5 人可能分開坐）→ 星巴克烘焙工坊（可能排隊）→ 澀谷 SKY 16:30 定時入場 → 利久 18:30。星巴克如果排超過 1 小時，加上移動會擠到 SKY 的時段，晚到可能被拒入場或要改期（請看票券規定）。</p>
+        <div class="fix">星巴克設一個最晚離開時間（例如 15:40）。先確認 SKY 的改期規則。</div>
+      </div>
+
+      <div class="item">
+        <h3><span class="tag">Y7</span>D8 午餐後到 16:45 有 4 小時空白</h3>
+        <div class="where">位置：D8 R9～R10、費用 R22</div>
+        <p>標題有「銀座」，行程表卻沒有銀座項目，12:30 午餐結束到 16:45 麻布台之間沒有安排。晴空塔展望台標「選配」，預算卻已含 ¥12,500，預訂清單也沒有晴空塔時段票。</p>
+        <div class="fix">補上銀座行程，或把空檔當機動緩衝。決定要不要上展望台，要上就先訂時段票。</div>
+      </div>
+
+      <div class="item">
+        <h3><span class="tag">Y8</span>D8 晚餐：只收現金、排隊、湯賣完，沒有備案</h3>
+        <div class="where">位置：D8 R10～R11</div>
+        <p>16:45 麻布台 Sky Room 只收卡或電子支付，18:15 銀座篝本店只收現金，晚上人多、湯賣完會提早打烊。兩家付款方式相反，也沒有備用店家。</p>
+        <div class="fix">這一天預留約 ¥10,000 以上現金。再備一間同區的替代店。</div>
+      </div>
+
+      <div class="item">
+        <h3><span class="tag">Y9</span>四餐「待定」，其中 D3 箱根晚餐風險最高</h3>
+        <div class="where">位置：三餐總覽 R11、R18、R24、R29</div>
+        <p>D3 晚、D5 晚、D7 晚、D9 午還沒決定。D3 備選裡好幾家約 19:00 打烊（表內自己標註），而 17:00 才入住。D7 預計 19:00 吃壽司，美登利和花まる晚餐時段都熱門，花まる還要現場抽號碼。</p>
+        <div class="fix">D3 先訂一間，或確認飯店內居酒屋。D7 選一間可訂位的壽司店。</div>
+      </div>
+
+      <div class="item">
+        <h3><span class="tag">Y10</span>多數餐廳的公休日沒查</h3>
+        <div class="where">位置：三餐總覽、各日備註</div>
+        <p>只有恵比寿家（週二）和はつ花（週三）標了公休日。BASO、利久、田むら、五味八珍、敘敘苑、今半、篝都沒有。再加上 R1 的星期問題，公休判斷要重做。</p>
+        <div class="fix">在三餐總覽加一欄「公休」，逐店查官網或 Google Maps 的 10 月營業時間。</div>
+      </div>
+
+      <div class="item">
+        <h3><span class="tag">Y11</span>預算有漏算</h3>
+        <div class="where">位置：D4 F24／G24、D6 費用表、三餐總覽 R12／R19</div>
+        <ul>
+          <li><b>D4 小計漏算一列</b>：F24 是 <code>SUM(F15:F22)</code>，漏掉第 23 列「寄放行李 ¥2,000」，總覽少算約 NT$400。</li>
+          <li>D6 早餐（超商 ¥600×5＝¥3,000）三餐總覽有寫，費用表沒有。</li>
+          <li>D4 早餐（箱根飯店是否含）沒確認，若不含就沒有預算。</li>
+          <li>總覽 F20 機票空白，另外購物、保險、網卡都未列入。</li>
+        </ul>
+        <div class="fix">F24、G24 改成 SUM(F15:F23)，補上 D6 早餐。</div>
+      </div>
+
+      <div class="item">
+        <h3><span class="tag">Y12</span>航班資訊空白</h3>
+        <div class="where">位置：D1 R6、D9 R7～R8、預訂清單 A17</div>
+        <p>D1 只寫「下午」、D9 只寫「起飛前約 4 小時」。航班時間、成田航廈、行李額度都沒填。D1 要選對車站（T1 與 T2／T3 不同站），D9 的退房、午餐、出發時間全都取決於班機。D7 在幕張大採購，行李額度也會影響。</p>
+        <div class="fix">把去回程班機時間、航廈、行李額度填進 D1／D9。</div>
+      </div>
+
+      <div class="item">
+        <h3><span class="tag">Y13</span>預訂清單漏了幾項</h3>
+        <div class="where">位置：預訂清單</div>
+        <p>沒列到的有：晴空塔時段票（若上展望台）、行李配送或寄放、旅遊保險、網卡或 eSIM、入境手續（Visit Japan Web，建議先填）、現金準備，另外護照效期也建議順手確認。</p>
+        <div class="fix">把這幾項加進清單，並各自填上截止日。</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== 綠燈 ===================== -->
+  <section class="green">
+    <h2><span class="dot d-green"></span>綠燈 <small>小瑕疵，不影響行程，有空再修</small></h2>
+    <div class="grid">
+
+      <div class="item">
+        <h3><span class="tag">G1</span>殘留備註沒進預算</h3>
+        <div class="where">位置：D4 H29、D6 H31</div>
+        <p>D4 寫著「加上公費（買布丁）」，D6 寫著「加上 日光兩日券 3000」，兩句都是孤立在儲存格的備註。後者其實是個待決定的省錢選項：D6 的東武特急＋巴士合計 ¥41,500，可以和日光周遊券比價。</p>
+      </div>
+
+      <div class="item">
+        <h3><span class="tag">G2</span>預訂清單的小瑕疵</h3>
+        <div class="where">位置：預訂清單 B8、D9、E 欄</div>
+        <p>浪漫特快的「用在哪天」是空的（應為 D3）。東武特急備註被截斷：「搭乘日前一個月早上8.」。Klook 連結帶著廣告追蹤參數，可以清掉。利久的連結是 Tabelog 評價頁，不是訂位頁。</p>
+      </div>
+
+      <div class="item">
+        <h3><span class="tag">G3</span>圖片區與當日備忘都還是空的</h3>
+        <div class="where">位置：D1～D9 的「景點與美食」、「當日備忘」</div>
+        <p>圖片欄全是「（圖片放這裡）」，D7 的景點表是空白，各日「當日備忘」也都沒填。</p>
+      </div>
+
+      <div class="item">
+        <h3><span class="tag">G4</span>匯率是 2026/6 的參考值</h3>
+        <div class="where">位置：總覽 C5</div>
+        <p>0.20 是銀行現鈔賣出價的參考，檔案自己也寫了出發前更新。實際刷卡或換匯還有手續費差。</p>
+      </div>
+
+      <div class="item">
+        <h3><span class="tag">G5</span>D8「淺草線坐一站到押上」</h3>
+        <div class="where">位置：D8 R8</div>
+        <p>淺草到押上實際是兩站（中間經本所吾妻橋），不影響票價和行程，只是備註不準。</p>
+      </div>
+    </div>
+  </section>
+
+  <h2>已核對、沒問題的部分</h2>
+  <div class="ok">
+    <ul>
+      <li>總覽總計 ¥640,030 × 0.20 ＋ NT$51,640 ＝ NT$179,646，算術一致，每人 NT$35,929。</li>
+      <li>住宿表合計（¥216,180、NT$51,640）和各日分頁一致。</li>
+      <li>床位夠用：東京飯店 3 間雙人房＝6 床，湯本、熱海各 1 雙人房＋1 四人房＝6 床，都容得下 5 人。</li>
+      <li>東京飯店 6 晚的日期（10/16、10/17、10/20～10/23）與預訂清單一致。</li>
+      <li>箱根周遊券 2 日券涵蓋 D3～D4 連續兩天，浪漫特快特急券另計也已列入。</li>
+      <li>除 D4 外，其餘各日小計公式都涵蓋了所有費用列。</li>
+      <li>各日地鐵路線我依既有知識逐段檢查過，沒發現無法成立的轉乘（馬喰横山→新宿直達、小傳馬町→八丁堀→京葉線、押上→人形町直達、銀座→小傳馬町直達）。</li>
+    </ul>
+  </div>
+
+  <footer>
+    本報告根據檔案內容與我的一般知識檢查，沒有連網查證營業時間、票價、班次與公休日。凡標示「請查官網」或「我印象」的地方都請以官方資料為準。
+  </footer>
+</div>
+</body>
+</html>
